@@ -1,0 +1,58 @@
+import { Link } from "react-router-dom";
+import { Search, ShoppingCart, Heart } from "lucide-react";
+
+const Header = () => {
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+      <div className="flex items-center justify-between h-16 px-8">
+        <div className="flex-1" />
+        
+        <nav className="flex items-center gap-12">
+          <Link 
+            to="/about" 
+            className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+          >
+            О БРЕНДЕ
+          </Link>
+          <Link 
+            to="/catalog" 
+            className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+          >
+            КАТАЛОГ
+          </Link>
+          <Link 
+            to="/lookbook" 
+            className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+          >
+            LOOKBOOK
+          </Link>
+          <Link 
+            to="/info" 
+            className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+          >
+            INFO +
+          </Link>
+        </nav>
+
+        <div className="flex-1 flex items-center justify-end gap-6">
+          <input
+            type="text"
+            placeholder=""
+            className="w-32 bg-transparent border-b border-border focus:outline-none text-sm"
+          />
+          <button className="hover:opacity-60 transition-opacity">
+            <Search className="w-5 h-5" />
+          </button>
+          <button className="hover:opacity-60 transition-opacity">
+            <ShoppingCart className="w-5 h-5" />
+          </button>
+          <button className="hover:opacity-60 transition-opacity">
+            <Heart className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
