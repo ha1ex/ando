@@ -11,7 +11,8 @@ const products = [
     colors: ["#C4A4C4", "#E8E8E8"],
     sizes: ["S", "M", "L"],
     image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80",
-    sale: 10
+    sale: 10,
+    category: "Свитшот"
   },
   {
     id: 2,
@@ -19,7 +20,8 @@ const products = [
     price: 11599,
     colors: ["#D3D3D3", "#4A4A4A"],
     sizes: ["S", "M", "L"],
-    image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80"
+    image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80",
+    category: "Свитера"
   },
   {
     id: 3,
@@ -27,7 +29,93 @@ const products = [
     price: 3600,
     colors: ["#D4E157", "#E8E8E8"],
     sizes: ["S", "M", "L"],
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80"
+    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
+    category: "Топы"
+  },
+  {
+    id: 4,
+    name: "Блузка «Минимал»",
+    price: 5200,
+    colors: ["#FFFFFF", "#F5F5DC"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=800&q=80",
+    category: "Блузки"
+  },
+  {
+    id: 5,
+    name: "Рубашка оверсайз",
+    price: 6800,
+    colors: ["#FFFFFF", "#708090"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1624206112918-f140f087f9b5?w=800&q=80",
+    category: "Рубашки"
+  },
+  {
+    id: 6,
+    name: "Юбка миди «Волна»",
+    price: 4900,
+    colors: ["#2F4F4F", "#D2B48C"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=800&q=80",
+    category: "Юбки"
+  },
+  {
+    id: 7,
+    name: "Брюки широкие",
+    price: 8200,
+    colors: ["#696969", "#F5F5DC"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=800&q=80",
+    category: "Брюки"
+  },
+  {
+    id: 8,
+    name: "Куртка «Кокон»",
+    price: 15900,
+    colors: ["#2F4F4F", "#D2B48C"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&q=80",
+    category: "Куртки"
+  },
+  {
+    id: 9,
+    name: "Жакет структурный",
+    price: 12300,
+    colors: ["#808080", "#F5F5DC"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=800&q=80",
+    category: "Жакеты"
+  },
+  {
+    id: 10,
+    name: "Толстовка «Комфорт»",
+    price: 5800,
+    oldPrice: 6500,
+    colors: ["#708090", "#F5F5DC"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80",
+    sale: 11,
+    category: "Толстовки"
+  },
+  {
+    id: 11,
+    name: "Худи оверсайз",
+    price: 6200,
+    colors: ["#696969", "#F0E68C"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80",
+    category: "Худи"
+  },
+  {
+    id: 12,
+    name: "Топ асимметричный",
+    price: 3200,
+    oldPrice: 4000,
+    colors: ["#000000", "#FFFFFF"],
+    sizes: ["S", "M", "L"],
+    image: "https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=800&q=80",
+    sale: 20,
+    category: "Топы"
   }
 ];
 
@@ -47,12 +135,26 @@ const categories = [
 ];
 
 const Catalog = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Свитшот");
+  const [selectedCategory, setSelectedCategory] = useState("Все товары");
+
+  const filteredProducts = selectedCategory === "Все товары" 
+    ? products 
+    : selectedCategory === "SALE %"
+    ? products.filter(p => p.sale)
+    : products.filter(p => p.category === selectedCategory);
 
   return (
     <div className="flex min-h-screen">
       <aside className="w-64 border-r border-border py-12 px-6">
         <nav className="space-y-4">
+          <button
+            onClick={() => setSelectedCategory("Все товары")}
+            className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${
+              selectedCategory === "Все товары" ? "underline" : ""
+            }`}
+          >
+            Все товары
+          </button>
           {categories.map((category) => (
             <button
               key={category}
@@ -91,7 +193,7 @@ const Catalog = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-8 p-8">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <Link
               key={product.id}
               to={`/product/${product.id}`}

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 const Product = () => {
   const { id } = useParams();
+  const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState("M");
   const [selectedColor, setSelectedColor] = useState(0);
   
@@ -24,6 +27,18 @@ const Product = () => {
   };
 
   const [currentImage, setCurrentImage] = useState(0);
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: Number(id),
+      name: product.name,
+      price: product.price,
+      size: selectedSize,
+      color: product.color,
+      image: product.images[0],
+    });
+    toast.success("Товар добавлен в корзину");
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -137,7 +152,10 @@ const Product = () => {
           </div>
 
           <div className="flex gap-3 mb-8">
-            <button className="flex-1 bg-foreground text-background py-4 px-6 text-sm tracking-wide uppercase hover:opacity-90 transition-opacity">
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 bg-foreground text-background py-4 px-6 text-sm tracking-wide uppercase hover:opacity-90 transition-opacity"
+            >
               ДОБАВИТЬ В КОРЗИНУ
             </button>
             <button className="w-12 h-12 border border-border hover:border-foreground transition-colors flex items-center justify-center">

@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import { Search, ShoppingCart, Heart } from "lucide-react";
+import { useState } from "react";
+import CartDrawer from "./CartDrawer";
+import { useCart } from "@/contexts/CartContext";
 
 const Header = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { totalItems } = useCart();
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="flex items-center justify-between h-16 px-8">
         <div className="flex-1" />
         
@@ -43,8 +50,16 @@ const Header = () => {
           <button className="hover:opacity-60 transition-opacity">
             <Search className="w-5 h-5" />
           </button>
-          <button className="hover:opacity-60 transition-opacity">
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="hover:opacity-60 transition-opacity relative"
+          >
             <ShoppingCart className="w-5 h-5" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-foreground text-background text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
           </button>
           <button className="hover:opacity-60 transition-opacity">
             <Heart className="w-5 h-5" />
@@ -52,6 +67,9 @@ const Header = () => {
         </div>
       </div>
     </header>
+    
+    <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    </>
   );
 };
 
