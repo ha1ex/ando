@@ -86,10 +86,10 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                 to={`/product/${product.slug}`}
                 className="group"
               >
-                <div className="relative aspect-[3/4] mb-4 overflow-hidden">
+                <div className="relative aspect-[3/4] mb-3 overflow-hidden bg-muted">
                   {product.is_sale && discount > 0 && (
-                    <div className="absolute top-4 right-4 z-10 bg-black text-white w-12 h-12 rounded-full flex items-center justify-center text-xs">
-                      -{discount}%
+                    <div className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
+                      {discount}%
                     </div>
                   )}
                   <img
@@ -99,35 +99,34 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                   />
                 </div>
                 
-                <h3 className="text-sm mb-2 tracking-wide">{product.name}</h3>
+                <h3 className="text-sm mb-2 tracking-wide text-foreground">{product.name}</h3>
                 
-                {product.available_colors && product.available_colors.length > 0 && (
-                  <div className="flex items-center gap-2 mb-2">
-                    {product.available_colors.slice(0, 4).map((color, idx) => (
-                      <div
-                        key={idx}
-                        className="w-4 h-4 rounded-full border border-border"
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-2 mb-2">
                   {product.old_price && (
                     <span className="text-sm text-muted-foreground line-through">
                       {product.old_price} ₽
                     </span>
                   )}
-                  <span className="text-sm font-medium">
+                  <span className="text-sm text-foreground">
                     {product.price} ₽
                   </span>
+                  {product.available_colors && product.available_colors.length > 0 && (
+                    <div className="flex items-center gap-1.5 ml-auto">
+                      {product.available_colors.slice(0, 4).map((color, idx) => (
+                        <div
+                          key={idx}
+                          className="w-3 h-3 rounded-full border border-border/50"
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {product.available_sizes && product.available_sizes.length > 0 && (
-                  <div className="flex gap-2 text-xs">
+                  <div className="flex gap-3 text-xs text-muted-foreground">
                     {product.available_sizes.map((size) => (
-                      <span key={size} className="text-muted-foreground">
+                      <span key={size}>
                         {size}
                       </span>
                     ))}
