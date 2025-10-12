@@ -267,23 +267,21 @@ export const ProductImageManager = ({ productId }: ProductImageManagerProps) => 
       const imageToMove = images.find(img => img.id === imageId);
       if (!imageToMove) return;
 
-      // Set this image to order 0, and shift all others down
-      const updates = images.map((img) => {
-        if (img.id === imageId) {
-          return supabase
-            .from('product_images')
-            .update({ display_order: 0 })
-            .eq('id', img.id);
-        } else if (img.display_order < imageToMove.display_order) {
-          return supabase
-            .from('product_images')
-            .update({ display_order: img.display_order + 1 })
-            .eq('id', img.id);
-        }
-        return Promise.resolve();
-      });
+      // Create new order: selected image first, others follow
+      const reorderedImages = [
+        imageToMove,
+        ...images.filter(img => img.id !== imageId)
+      ];
 
-      await Promise.all(updates.filter(u => u));
+      // Update all images with new order
+      const updates = reorderedImages.map((img, index) => 
+        supabase
+          .from('product_images')
+          .update({ display_order: index })
+          .eq('id', img.id)
+      );
+
+      await Promise.all(updates);
       toast({ title: 'Главное изображение установлено' });
       fetchImages();
     } catch (error) {
