@@ -134,8 +134,12 @@ const categories = [
   "SALE %"
 ];
 
-const Catalog = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Все товары");
+interface CatalogProps {
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+}
+
+const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
 
   const filteredProducts = selectedCategory === "Все товары" 
     ? products 
@@ -144,32 +148,7 @@ const Catalog = () => {
     : products.filter(p => p.category === selectedCategory);
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-64 border-r border-border py-12 px-6">
-        <nav className="space-y-4">
-          <button
-            onClick={() => setSelectedCategory("Все товары")}
-            className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${
-              selectedCategory === "Все товары" ? "underline" : ""
-            }`}
-          >
-            Все товары
-          </button>
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${
-                category === selectedCategory ? "underline" : ""
-              } ${category === "SALE %" ? "text-accent" : ""}`}
-            >
-              {category}
-            </button>
-          ))}
-        </nav>
-      </aside>
-
-      <div className="flex-1">
+    <div className="min-h-screen">
         <div className="border-b border-border py-4 px-8">
           <div className="flex items-center justify-between text-sm">
             <div className="flex gap-8">
@@ -245,7 +224,6 @@ const Catalog = () => {
             </Link>
           ))}
         </div>
-      </div>
     </div>
   );
 };

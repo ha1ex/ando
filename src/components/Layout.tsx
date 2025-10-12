@@ -4,12 +4,14 @@ import LeftSidebar from "./LeftSidebar";
 
 interface LayoutProps {
   children: ReactNode;
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, selectedCategory, onCategoryChange }: LayoutProps) => {
   return (
     <div className="min-h-screen">
-      <LeftSidebar />
+      <LeftSidebar selectedCategory={selectedCategory} onCategoryChange={onCategoryChange} />
       <Header />
       <main className="ml-64 pt-16">
         {children}
