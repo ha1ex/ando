@@ -3,7 +3,7 @@ import { useCategories } from '@/hooks/useProducts';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, GripVertical } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -30,6 +30,9 @@ interface Category {
   name: string;
   slug: string;
   description: string | null;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 const AdminCategories = () => {
@@ -38,6 +41,7 @@ const AdminCategories = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
+  const [draggedItem, setDraggedItem] = useState<Category | null>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -45,6 +49,8 @@ const AdminCategories = () => {
     slug: '',
     description: '',
   });
+
+  const sortedCategories = categories?.slice().sort((a, b) => a.display_order - b.display_order);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,6 +141,52 @@ const AdminCategories = () => {
     setDeleteDialogOpen(true);
   };
 
+  const handleDragStart = (e: React.DragEvent, category: Category) => {
+    setDraggedItem(category);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetCategory: Category) => {
+    e.preventDefault();
+    
+    if (!draggedItem || draggedItem.id === targetCategory.id || !sortedCategories) return;
+
+    const draggedIndex = sortedCategories.findIndex(c => c.id === draggedItem.id);
+    const targetIndex = sortedCategories.findIndex(c => c.id === targetCategory.id);
+
+    const newOrder = [...sortedCategories];
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedItem);
+
+    try {
+      const updates = newOrder.map((cat, index) => 
+        supabase
+          .from('categories')
+          .update({ display_order: index })
+          .eq('id', cat.id)
+      );
+
+      await Promise.all(updates);
+      
+      toast({ title: 'Порядок категорий обновлен' });
+      refetch();
+    } catch (error) {
+      console.error('Error updating category order:', error);
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось обновить порядок категорий',
+        variant: 'destructive',
+      });
+    }
+
+    setDraggedItem(null);
+  };
+
   if (isLoading) {
     return <div className="p-8">Загрузка...</div>;
   }
@@ -215,10 +267,11 @@ const AdminCategories = () => {
           </Dialog>
         </CardHeader>
         <CardContent>
-          {categories && categories.length > 0 ? (
+          {sortedCategories && sortedCategories.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-[50px]"></TableHead>
                   <TableHead>Название</TableHead>
                   <TableHead>Slug</TableHead>
                   <TableHead>Описание</TableHead>
@@ -226,8 +279,18 @@ const AdminCategories = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {categories.map((category) => (
-                  <TableRow key={category.id}>
+                {sortedCategories.map((category) => (
+                  <TableRow 
+                    key={category.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, category)}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, category)}
+                    className={`cursor-move ${draggedItem?.id === category.id ? 'opacity-50' : ''}`}
+                  >
+                    <TableCell>
+                      <GripVertical className="w-4 h-4 text-muted-foreground" />
+                    </TableCell>
                     <TableCell className="font-medium">{category.name}</TableCell>
                     <TableCell className="font-mono text-sm">
                       {category.slug}
