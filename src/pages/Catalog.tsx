@@ -417,7 +417,7 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                     onMouseLeave={handleMouseLeave}
                   >
                     {product.is_sale && discount > 0 && (
-                      <div className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
+                      <div className="absolute bottom-4 left-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
                         {discount}%
                       </div>
                     )}
