@@ -71,7 +71,7 @@ export const useCategories = () => {
       const { data, error } = await supabase
         .from('categories')
         .select('*')
-        .order('name', { ascending: true });
+        .order('display_order', { ascending: true });
 
       if (error) throw error;
       return data;
