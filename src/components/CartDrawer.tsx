@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { X, Minus, Plus } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
@@ -9,6 +9,12 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { items, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    onClose();
+    navigate('/checkout');
+  };
 
   if (!isOpen) return null;
 
@@ -92,7 +98,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
               <span>Итого:</span>
               <span className="font-medium">{totalPrice} ₽</span>
             </div>
-            <button className="w-full bg-foreground text-background py-4 text-sm tracking-wide uppercase hover:opacity-90 transition-opacity">
+            <button 
+              onClick={handleCheckout}
+              className="w-full bg-foreground text-background py-4 text-sm tracking-wide uppercase hover:opacity-90 transition-opacity"
+            >
               Оформить заказ
             </button>
             <button
