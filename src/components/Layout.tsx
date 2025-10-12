@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Header from "./Header";
-import LeftSidebar from "./LeftSidebar";
+import { AppSidebar } from "./AppSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,13 +11,17 @@ interface LayoutProps {
 
 const Layout = ({ children, selectedCategory, onCategoryChange }: LayoutProps) => {
   return (
-    <div className="min-h-screen">
-      <LeftSidebar selectedCategory={selectedCategory} onCategoryChange={onCategoryChange} />
-      <Header />
-      <main className="ml-64 pt-16">
-        {children}
-      </main>
-    </div>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar selectedCategory={selectedCategory} onCategoryChange={onCategoryChange} />
+        <div className="flex-1 flex flex-col">
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
 

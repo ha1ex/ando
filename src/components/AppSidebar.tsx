@@ -1,0 +1,102 @@
+import { Link, useLocation } from "react-router-dom";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  useSidebar,
+} from "@/components/ui/sidebar";
+
+interface AppSidebarProps {
+  selectedCategory?: string;
+  onCategoryChange?: (category: string) => void;
+}
+
+const categories = [
+  "Топы",
+  "Блузки",
+  "Рубашки",
+  "Юбки",
+  "Брюки",
+  "Свитшот",
+  "Куртки",
+  "Жакеты",
+  "Свитера",
+  "Толстовки",
+  "Худи",
+  "SALE %"
+];
+
+export function AppSidebar({ selectedCategory, onCategoryChange }: AppSidebarProps) {
+  const location = useLocation();
+  const isCatalogPage = location.pathname === "/catalog";
+
+  return (
+    <Sidebar className="border-r border-border">
+      <div className="flex flex-col h-full pt-8 pb-8">
+        <Link to="/" className="mb-32 px-6 flex justify-center">
+          <div className="border border-foreground p-4 text-center">
+            <div className="text-xl font-light tracking-[0.2em]">AN</div>
+            <div className="text-xl font-light tracking-[0.2em]">DO</div>
+            <div className="w-full h-[1px] bg-foreground my-1" />
+            <div className="text-xs tracking-[0.3em]">JV</div>
+          </div>
+        </Link>
+
+        <SidebarContent className="flex-1">
+          <SidebarGroup>
+            <SidebarGroupContent>
+              {isCatalogPage ? (
+                <SidebarMenu className="space-y-4 px-6">
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      onClick={() => onCategoryChange?.("Все товары")}
+                      className={`w-full justify-start text-sm tracking-wide hover:opacity-60 transition-opacity ${
+                        selectedCategory === "Все товары" ? "underline" : ""
+                      }`}
+                    >
+                      Все товары
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  {categories.map((category) => (
+                    <SidebarMenuItem key={category}>
+                      <SidebarMenuButton
+                        onClick={() => onCategoryChange?.(category)}
+                        className={`w-full justify-start text-sm tracking-wide hover:opacity-60 transition-opacity ${
+                          category === selectedCategory ? "underline" : ""
+                        } ${category === "SALE %" ? "text-accent" : ""}`}
+                      >
+                        {category}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p 
+                    className="text-xs tracking-[0.3em] uppercase"
+                    style={{ 
+                      writingMode: 'vertical-rl',
+                      textOrientation: 'mixed'
+                    }}
+                  >
+                    Feel the moment
+                  </p>
+                </div>
+              )}
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <div className="text-[8px] text-center leading-relaxed text-muted-foreground px-2">
+          © 2025 ANDO JV. Все права<br />
+          защищены. Не является публичной<br />
+          офертой.
+        </div>
+      </div>
+    </Sidebar>
+  );
+}
