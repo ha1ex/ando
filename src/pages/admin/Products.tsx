@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useCategories } from '@/hooks/useProducts';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, X, GripVertical } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -43,6 +43,7 @@ interface Product {
   is_sale: boolean;
   stock_quantity: number;
   category_id: string | null;
+  display_order: number;
 }
 
 const AdminProducts = () => {
@@ -56,6 +57,7 @@ const AdminProducts = () => {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [customSizeInput, setCustomSizeInput] = useState('');
   const [customColorInput, setCustomColorInput] = useState('');
+  const [draggedItem, setDraggedItem] = useState<Product | null>(null);
   const { toast } = useToast();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
 
@@ -118,7 +120,7 @@ const AdminProducts = () => {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('display_order', { ascending: true });
 
       if (error) throw error;
       setProducts(data || []);
@@ -305,6 +307,52 @@ const AdminProducts = () => {
       ...formData,
       available_colors: formData.available_colors.filter(c => c !== color)
     });
+  };
+
+  const handleDragStart = (e: React.DragEvent, product: Product) => {
+    setDraggedItem(product);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetProduct: Product) => {
+    e.preventDefault();
+    
+    if (!draggedItem || draggedItem.id === targetProduct.id) return;
+
+    const draggedIndex = filteredProducts.findIndex(p => p.id === draggedItem.id);
+    const targetIndex = filteredProducts.findIndex(p => p.id === targetProduct.id);
+
+    const newOrder = [...filteredProducts];
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedItem);
+
+    try {
+      const updates = newOrder.map((product, index) => 
+        supabase
+          .from('products')
+          .update({ display_order: index })
+          .eq('id', product.id)
+      );
+
+      await Promise.all(updates);
+      
+      toast({ title: 'Порядок товаров обновлен' });
+      fetchProducts();
+    } catch (error) {
+      console.error('Error updating product order:', error);
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось обновить порядок товаров',
+        variant: 'destructive',
+      });
+    }
+
+    setDraggedItem(null);
   };
 
   const handleEdit = async (product: Product) => {
@@ -750,6 +798,7 @@ const AdminProducts = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[50px]"></TableHead>
                 <TableHead>Название</TableHead>
                 <TableHead>Slug</TableHead>
                 <TableHead>Цена</TableHead>
@@ -760,7 +809,17 @@ const AdminProducts = () => {
             </TableHeader>
             <TableBody>
               {filteredProducts.map((product) => (
-                <TableRow key={product.id}>
+                <TableRow 
+                  key={product.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, product)}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, product)}
+                  className={`cursor-move ${draggedItem?.id === product.id ? 'opacity-50' : ''}`}
+                >
+                  <TableCell>
+                    <GripVertical className="w-4 h-4 text-muted-foreground" />
+                  </TableCell>
                   <TableCell>{product.name}</TableCell>
                   <TableCell className="font-mono text-sm">
                     {product.slug}
