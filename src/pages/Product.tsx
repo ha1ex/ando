@@ -41,7 +41,7 @@ const Product = () => {
   };
 
   return (
-    <div className="flex-1 flex pt-4">
+    <div className="flex h-full">
         <div className="flex-1 flex items-center justify-center py-16 px-8">
           <div className="relative max-w-xl">
             <button 

@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { AppSidebar } from "./AppSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,23 +13,20 @@ interface LayoutProps {
 
 const Layout = ({ children, selectedCategory, onCategoryChange, activeInfoSection, onInfoSectionChange }: LayoutProps) => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <AppSidebar 
-          selectedCategory={selectedCategory} 
-          onCategoryChange={onCategoryChange}
-          activeInfoSection={activeInfoSection}
-          onInfoSectionChange={onInfoSectionChange}
-        />
-        <div className="flex-1 flex flex-col">
-          <Header />
-          <main className="flex-1 pt-16">
-            {children}
-          </main>
-          <Footer />
-        </div>
+    <div className="flex h-screen overflow-hidden">
+      <AppSidebar 
+        selectedCategory={selectedCategory} 
+        onCategoryChange={onCategoryChange}
+        activeInfoSection={activeInfoSection}
+        onInfoSectionChange={onInfoSectionChange}
+      />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
       </div>
-    </SidebarProvider>
+    </div>
   );
 };
 

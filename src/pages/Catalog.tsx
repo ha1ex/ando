@@ -148,7 +148,7 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
     : products.filter(p => p.category === selectedCategory);
 
   return (
-    <div className="min-h-screen pt-4">
+    <div className="min-h-full">
         <div className="border-b border-border py-4 px-8">
           <div className="flex items-center justify-between text-sm">
             <div className="flex gap-8">
