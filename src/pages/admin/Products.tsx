@@ -47,9 +47,12 @@ interface Product {
 
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const { toast } = useToast();
   const { data: categories } = useCategories();
 
@@ -74,6 +77,35 @@ const AdminProducts = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [products, searchQuery, categoryFilter]);
+
+  const filterProducts = () => {
+    let filtered = [...products];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.slug.toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter
+    if (categoryFilter !== 'all') {
+      if (categoryFilter === 'none') {
+        filtered = filtered.filter((p) => !p.category_id);
+      } else {
+        filtered = filtered.filter((p) => p.category_id === categoryFilter);
+      }
+    }
+
+    setFilteredProducts(filtered);
+  };
 
   const fetchProducts = async () => {
     try {
@@ -241,9 +273,16 @@ const AdminProducts = () => {
   return (
     <div className="p-8">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Управление товарами</CardTitle>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <CardHeader>
+          <div className="flex items-center justify-between mb-4">
+            <CardTitle>Управление товарами</CardTitle>
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={resetForm}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Добавить товар
+                </Button>
+              </DialogTrigger>
             <DialogTrigger asChild>
               <Button onClick={resetForm}>
                 <Plus className="w-4 h-4 mr-2" />
@@ -483,8 +522,40 @@ const AdminProducts = () => {
               </Tabs>
             </DialogContent>
           </Dialog>
+          
+          <div className="flex gap-4 mt-4">
+            <div className="flex-1">
+              <Input
+                placeholder="Поиск по названию или slug..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Все категории" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Все категории</SelectItem>
+                <SelectItem value="none">Без категории</SelectItem>
+                {categories?.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          </div>
         </CardHeader>
         <CardContent>
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              {searchQuery || categoryFilter !== 'all'
+                ? 'Товары не найдены. Попробуйте изменить фильтры.'
+                : 'Товары не созданы. Нажмите "Добавить товар" для создания.'}
+            </div>
+          ) : (
           <Table>
             <TableHeader>
               <TableRow>
@@ -497,7 +568,7 @@ const AdminProducts = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell>{product.name}</TableCell>
                   <TableCell className="font-mono text-sm">
@@ -528,6 +599,11 @@ const AdminProducts = () => {
               ))}
             </TableBody>
           </Table>
+          )}
+          
+          <div className="mt-4 text-sm text-muted-foreground">
+            Показано товаров: {filteredProducts.length} из {products.length}
+          </div>
         </CardContent>
       </Card>
     </div>

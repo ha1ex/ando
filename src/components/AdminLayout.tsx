@@ -7,9 +7,15 @@ const AdminLayout = () => {
   const location = useLocation();
   const { signOut } = useAuth();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin';
+    }
+    return location.pathname === path;
+  };
 
   const navItems = [
+    { path: '/admin', label: 'Главная', icon: LayoutDashboard },
     { path: '/admin/orders', label: 'Заказы', icon: ShoppingCart },
     { path: '/admin/products', label: 'Товары', icon: Package },
     { path: '/admin/categories', label: 'Категории', icon: Folder },
