@@ -22,7 +22,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative h-[calc(100vh-4rem)] overflow-hidden -ml-64 -mt-16">
       {slides.map((slide, index) => (
         <div
           key={index}
