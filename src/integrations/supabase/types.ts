@@ -41,6 +41,101 @@ export type Database = {
         }
         Relationships: []
       }
+      info_pages: {
+        Row: {
+          content: string
+          created_at: string
+          display_order: number
+          id: string
+          is_visible: boolean
+          page_key: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          page_key: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          page_key?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lookbook_images: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          photographer_credit: string | null
+          season_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          photographer_credit?: string | null
+          season_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          photographer_credit?: string | null
+          season_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lookbook_images_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "lookbook_seasons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lookbook_seasons: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_active: boolean
+          season_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          season_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          season_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           color: string | null
@@ -273,6 +368,39 @@ export type Database = {
           id?: string
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value: Json
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }
