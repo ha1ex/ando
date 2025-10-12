@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Package, ShoppingCart, LayoutDashboard, LogOut } from 'lucide-react';
+import { Package, ShoppingCart, LayoutDashboard, LogOut, Settings, Image, FileText } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +12,9 @@ const AdminLayout = () => {
   const navItems = [
     { path: '/admin/orders', label: 'Заказы', icon: ShoppingCart },
     { path: '/admin/products', label: 'Товары', icon: Package },
+    { path: '/admin/lookbook', label: 'Лукбук', icon: Image },
+    { path: '/admin/info-pages', label: 'Инфо страницы', icon: FileText },
+    { path: '/admin/site-settings', label: 'Настройки', icon: Settings },
   ];
 
   return (
@@ -61,7 +64,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto p-8">
         <Outlet />
       </main>
     </div>
