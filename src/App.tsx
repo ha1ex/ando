@@ -20,6 +20,9 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import AdminOrders from "./pages/admin/Orders";
 import AdminProducts from "./pages/admin/Products";
+import AdminSiteSettings from "./pages/admin/SiteSettings";
+import AdminLookbook from "./pages/admin/Lookbook";
+import AdminInfoPages from "./pages/admin/InfoPages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +63,9 @@ const AppContent = () => {
         }>
           <Route path="orders" element={<AdminOrders />} />
           <Route path="products" element={<AdminProducts />} />
+          <Route path="site-settings" element={<AdminSiteSettings />} />
+          <Route path="lookbook" element={<AdminLookbook />} />
+          <Route path="info-pages" element={<AdminInfoPages />} />
         </Route>
         
         <Route path="*" element={<NotFound />} />
