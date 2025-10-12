@@ -21,6 +21,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import AdminOrders from "./pages/admin/Orders";
 import AdminProducts from "./pages/admin/Products";
 import AdminCategories from "./pages/admin/Categories";
+import AdminDashboard from "./pages/admin/Dashboard";
 import AdminSiteSettings from "./pages/admin/SiteSettings";
 import AdminLookbook from "./pages/admin/Lookbook";
 import AdminInfoPages from "./pages/admin/InfoPages";
@@ -62,6 +63,7 @@ const AppContent = () => {
             <AdminLayout />
           </ProtectedRoute>
         }>
+          <Route index element={<AdminDashboard />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="categories" element={<AdminCategories />} />
