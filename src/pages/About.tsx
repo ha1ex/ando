@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="min-h-screen py-16 px-16">
+    <div className="min-h-screen py-20 px-16">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl mb-16 tracking-[0.2em] uppercase">О Бренде</h1>
         

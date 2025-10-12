@@ -20,7 +20,7 @@ interface InfoProps {
 
 const Info = ({ activeSection, setActiveSection }: InfoProps) => {
   return (
-    <div className="flex-1 py-16 px-16 max-w-4xl">
+    <div className="flex-1 py-20 px-16 max-w-4xl">
         {activeSection === "brand" && (
           <div className="space-y-8">
             <h2 className="text-2xl mb-6 tracking-[0.15em] uppercase">О Бренде</h2>

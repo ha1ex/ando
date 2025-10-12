@@ -23,7 +23,7 @@ const Lookbook = () => {
   const [currentLookbook] = lookbooks.filter(lb => lb.season === selectedSeason);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-4">
       <div className="border-b border-border py-4 px-8 flex justify-end">
         <div className="relative">
           <select
