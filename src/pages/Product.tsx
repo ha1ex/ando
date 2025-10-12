@@ -63,9 +63,9 @@ const Product = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-full">
+    <div className="flex flex-col lg:flex-row min-h-full">
       {/* Left side - Product images */}
-      <div className="flex-1 flex items-center justify-center py-8 lg:py-16 px-4 lg:px-8 relative">
+      <div className="flex-1 flex items-center justify-center py-6 lg:py-16 px-4 lg:px-8 relative">
         {/* Left arrow - outside image */}
         {mainImages.length > 1 && (
           <button 
@@ -112,7 +112,7 @@ const Product = () => {
       </div>
 
       {/* Right side - Product info */}
-      <div className="w-full lg:w-[480px] border-t lg:border-t-0 lg:border-l border-border py-8 lg:py-16 px-6 lg:px-12 overflow-y-auto">
+      <div className="w-full lg:w-[480px] border-t lg:border-t-0 lg:border-l border-border py-6 lg:py-16 px-6 lg:px-12 lg:overflow-y-auto">{" "}
         {/* Title and discount badge */}
         <div className="flex items-start justify-between mb-6">
           <h1 className="text-sm tracking-[0.15em] uppercase font-light flex-1">
