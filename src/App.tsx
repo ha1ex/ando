@@ -14,6 +14,8 @@ import Lookbook from "./pages/Lookbook";
 import About from "./pages/About";
 import Info from "./pages/Info";
 import Auth from "./pages/Auth";
+import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +45,8 @@ const AppContent = () => {
           element={<Info activeSection={activeInfoSection} setActiveSection={setActiveInfoSection} />} 
         />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
