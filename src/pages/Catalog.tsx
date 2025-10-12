@@ -447,7 +447,11 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
 
                 {/* Favorite button */}
                 <button
-                  onClick={handleFavoriteClick}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleFavoriteClick(e);
+                  }}
                   className="absolute top-3 right-3 z-20 hover:scale-110 transition-transform"
                   aria-label={isFavorite(product.id) ? "Удалить из избранного" : "Добавить в избранное"}
                 >
