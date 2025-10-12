@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Header from "./Header";
+import Footer from "./Footer";
 import { AppSidebar } from "./AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
@@ -26,6 +27,7 @@ const Layout = ({ children, selectedCategory, onCategoryChange, activeInfoSectio
           <main className="flex-1 pt-16">
             {children}
           </main>
+          <Footer />
         </div>
       </div>
     </SidebarProvider>
