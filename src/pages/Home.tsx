@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const navigate = useNavigate();
   const { data: slides, isLoading } = useHeroSlides();
   
@@ -19,9 +20,15 @@ const Home = () => {
     return () => clearInterval(timer);
   }, [activeSlides.length]);
 
+  const handleNavigateToCatalog = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      navigate('/catalog');
+    }, 600);
+  };
+
   useEffect(() => {
     let touchStartY = 0;
-    let scrollStartY = 0;
 
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -31,36 +38,27 @@ const Home = () => {
       const touchEndY = e.touches[0].clientY;
       const diff = touchStartY - touchEndY;
       
-      if (diff > 50) {
-        navigate('/catalog');
+      if (diff > 50 && !isTransitioning) {
+        handleNavigateToCatalog();
       }
     };
 
     const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 50) {
-        navigate('/catalog');
+      if (e.deltaY > 50 && !isTransitioning) {
+        handleNavigateToCatalog();
       }
-    };
-
-    const handleScroll = () => {
-      if (window.scrollY > scrollStartY + 50) {
-        navigate('/catalog');
-      }
-      scrollStartY = window.scrollY;
     };
 
     document.addEventListener('touchstart', handleTouchStart);
     document.addEventListener('touchmove', handleTouchMove);
     document.addEventListener('wheel', handleWheel, { passive: true });
-    document.addEventListener('scroll', handleScroll);
 
     return () => {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('wheel', handleWheel);
-      document.removeEventListener('scroll', handleScroll);
     };
-  }, [navigate]);
+  }, [navigate, isTransitioning]);
 
   if (isLoading || activeSlides.length === 0) {
     return (
@@ -71,7 +69,9 @@ const Home = () => {
   }
 
   return (
-    <div className="relative h-[calc(100vh-4rem)] overflow-hidden">
+    <div className={`relative h-[calc(100vh-4rem)] overflow-hidden transition-all duration-700 ease-in-out ${
+      isTransitioning ? 'opacity-0 translate-y-[-20px]' : 'opacity-100 translate-y-0'
+    }`}>
       {activeSlides.map((slide, index) => (
         <div
           key={slide.id}
@@ -130,8 +130,8 @@ const Home = () => {
 
       {/* Scroll down indicator */}
       <button
-        onClick={() => navigate('/catalog')}
-        className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-white animate-fade-in hover:opacity-70 transition-opacity"
+        onClick={handleNavigateToCatalog}
+        className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-white animate-fade-in hover:opacity-70 transition-opacity z-10"
       >
         <span className="text-xs tracking-widest uppercase">Листайте вниз</span>
         <ChevronDown className="w-6 h-6 animate-bounce" />
