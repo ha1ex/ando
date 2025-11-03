@@ -70,23 +70,32 @@ const Product = () => {
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    console.log('Touch start:', e.targetTouches[0].clientX);
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
+    console.log('Touch move:', e.targetTouches[0].clientX);
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart || !touchEnd) {
+      console.log('Touch end - no start or end:', { touchStart, touchEnd });
+      return;
+    }
     
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
 
+    console.log('Touch end - distance:', distance, 'isLeftSwipe:', isLeftSwipe, 'isRightSwipe:', isRightSwipe, 'images count:', mainImages.length);
+
     if (isLeftSwipe && mainImages.length > 1) {
+      console.log('Swiping to next image');
       setCurrentImage((prev) => (prev + 1) % mainImages.length);
     }
     if (isRightSwipe && mainImages.length > 1) {
+      console.log('Swiping to previous image');
       setCurrentImage((prev) => (prev - 1 + mainImages.length) % mainImages.length);
     }
   };
