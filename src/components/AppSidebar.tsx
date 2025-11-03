@@ -91,7 +91,7 @@ export function AppSidebar({ selectedCategory, onCategoryChange, activeInfoSecti
           )}
 
           {isInfoPage && (
-            <nav className="space-y-2">
+            <nav className="space-y-2 pl-0">
               {infoMenuItems.map((item) => (
                 <Link
                   key={item.id}
