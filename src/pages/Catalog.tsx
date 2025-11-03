@@ -24,6 +24,8 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [currentImageIndexes, setCurrentImageIndexes] = useState<Record<string, number>>({});
   const [sortBy, setSortBy] = useState<string>('default');
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchProductId, setTouchProductId] = useState<string | null>(null);
   const mouseXRef = useRef<number>(0);
   
   const { data: categories = [] } = useCategories();
@@ -387,6 +389,42 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
               }));
             };
 
+            const handleTouchStart = (e: React.TouchEvent) => {
+              if (images.length <= 1) return;
+              setTouchStart(e.touches[0].clientX);
+              setTouchProductId(product.id);
+              setHoveredProduct(product.id);
+            };
+
+            const handleTouchMove = (e: React.TouchEvent) => {
+              if (!touchStart || touchProductId !== product.id || images.length <= 1) return;
+              
+              const touchEnd = e.touches[0].clientX;
+              const diff = touchStart - touchEnd;
+              
+              if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                  // Swiped left - next image
+                  setCurrentImageIndexes(prev => ({
+                    ...prev,
+                    [product.id]: Math.min((prev[product.id] || 0) + 1, images.length - 1)
+                  }));
+                } else {
+                  // Swiped right - previous image
+                  setCurrentImageIndexes(prev => ({
+                    ...prev,
+                    [product.id]: Math.max((prev[product.id] || 0) - 1, 0)
+                  }));
+                }
+                setTouchStart(touchEnd);
+              }
+            };
+
+            const handleTouchEnd = () => {
+              setTouchStart(null);
+              setTouchProductId(null);
+            };
+
             const handleFavoriteClick = async (e: React.MouseEvent) => {
               e.preventDefault();
               e.stopPropagation();
@@ -415,6 +453,9 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                     onMouseMove={handleMouseMove}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                   >
                     {product.is_sale && discount > 0 && (
                       <div className="absolute bottom-4 left-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
@@ -427,8 +468,8 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     
-                    {/* Image indicators */}
-                    {images.length > 1 && hoveredProduct === product.id && (
+                    {/* Image indicators - show on hover or touch */}
+                    {images.length > 1 && (hoveredProduct === product.id || touchProductId === product.id) && (
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                         {images.map((_, idx) => (
                           <div
