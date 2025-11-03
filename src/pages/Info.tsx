@@ -21,7 +21,7 @@ const Info = ({ activeSection }: InfoProps) => {
   // Try to find the active page from database
   const activePage = visiblePages?.find(p => p.page_key === activeSection);
   return (
-    <div className="flex-1 py-20 pl-0 pr-16 max-w-4xl min-h-full">
+    <div className="flex-1 py-20 px-16 max-w-4xl min-h-full">
       {activePage ? (
         <div className="space-y-8">
           <h2 className="text-2xl mb-6 tracking-[0.15em] uppercase">{activePage.title}</h2>
