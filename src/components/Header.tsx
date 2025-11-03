@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, ShoppingCart, Heart, User, LogOut, Menu as MenuIcon, ShieldCheck, Package } from "lucide-react";
 import { useState, useEffect } from "react";
 import CartDrawer from "./CartDrawer";
@@ -21,6 +21,7 @@ const Header = () => {
   const { totalItems } = useCart();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -59,28 +60,44 @@ const Header = () => {
           <div className="hidden lg:block flex-1" />
           
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-12">
-            <Link 
-              to="/about" 
-              className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
-            >
-              О БРЕНДЕ
-            </Link>
+          <nav className="hidden lg:flex items-center gap-16">
             <Link 
               to="/catalog" 
-              className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity pb-1 border-b-2 ${
+                location.pathname === '/catalog' || location.pathname.startsWith('/product/') 
+                  ? 'border-[#8FBE3F]' 
+                  : 'border-transparent'
+              }`}
             >
               КАТАЛОГ
             </Link>
             <Link 
+              to="/about" 
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity pb-1 border-b-2 ${
+                location.pathname === '/about' 
+                  ? 'border-[#8FBE3F]' 
+                  : 'border-transparent'
+              }`}
+            >
+              О БРЕНДЕ
+            </Link>
+            <Link 
               to="/lookbook" 
-              className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity pb-1 border-b-2 ${
+                location.pathname === '/lookbook' 
+                  ? 'border-[#8FBE3F]' 
+                  : 'border-transparent'
+              }`}
             >
               LOOKBOOK
             </Link>
             <Link 
               to="/info" 
-              className="text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity"
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-opacity pb-1 border-b-2 ${
+                location.pathname === '/info' 
+                  ? 'border-[#8FBE3F]' 
+                  : 'border-transparent'
+              }`}
             >
               INFO +
             </Link>
@@ -181,18 +198,18 @@ const Header = () => {
           <div className="lg:hidden border-t border-border bg-background">
             <nav className="flex flex-col py-4">
               <Link 
-                to="/about" 
-                className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                О БРЕНДЕ
-              </Link>
-              <Link 
                 to="/catalog" 
                 className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 КАТАЛОГ
+              </Link>
+              <Link 
+                to="/about" 
+                className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                О БРЕНДЕ
               </Link>
               <Link 
                 to="/lookbook" 
