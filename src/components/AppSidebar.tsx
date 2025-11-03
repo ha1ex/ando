@@ -65,7 +65,7 @@ export function AppSidebar({ selectedCategory, onCategoryChange, activeInfoSecti
           )}
 
           {isCatalogRelated && (
-            <nav className="space-y-2 pl-16">
+            <nav className="space-y-2 pl-0">
               <Link
                 to="/catalog"
                 onClick={() => onCategoryChange?.("Все товары")}
