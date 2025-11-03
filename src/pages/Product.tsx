@@ -16,6 +16,8 @@ const Product = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   if (isLoading) {
     return (
@@ -62,6 +64,33 @@ const Product = () => {
     toast.success("Товар добавлен в корзину");
   };
 
+  // Swipe handling
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && mainImages.length > 1) {
+      setCurrentImage((prev) => (prev + 1) % mainImages.length);
+    }
+    if (isRightSwipe && mainImages.length > 1) {
+      setCurrentImage((prev) => (prev - 1 + mainImages.length) % mainImages.length);
+    }
+  };
+
   return (
     <div className="flex flex-col lg:flex-row min-h-full">
       {/* Left side - Product images */}
@@ -77,7 +106,12 @@ const Product = () => {
         )}
 
         {/* Image container */}
-        <div className="max-w-xl w-full">
+        <div 
+          className="max-w-xl w-full"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <img
             src={mainImages[currentImage]}
             alt={product.name}
@@ -91,10 +125,15 @@ const Product = () => {
                 <button
                   key={idx}
                   onClick={() => setCurrentImage(idx)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    idx === currentImage ? "bg-primary w-8" : "bg-muted"
+                  className={`h-10 px-3 flex items-center justify-center rounded-full transition-all ${
+                    idx === currentImage ? "bg-primary" : "bg-transparent"
                   }`}
-                />
+                  aria-label={`Фото ${idx + 1}`}
+                >
+                  <span className={`w-2.5 h-2.5 rounded-full transition-all ${
+                    idx === currentImage ? "bg-primary-foreground w-8" : "bg-muted"
+                  }`} />
+                </button>
               ))}
             </div>
           )}
