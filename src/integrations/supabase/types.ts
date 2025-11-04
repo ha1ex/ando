@@ -386,6 +386,7 @@ export type Database = {
           description: string | null
           display_order: number
           id: string
+          is_new: boolean
           is_sale: boolean | null
           material: string | null
           name: string
@@ -407,6 +408,7 @@ export type Database = {
           description?: string | null
           display_order?: number
           id?: string
+          is_new?: boolean
           is_sale?: boolean | null
           material?: string | null
           name: string
@@ -428,6 +430,7 @@ export type Database = {
           description?: string | null
           display_order?: number
           id?: string
+          is_new?: boolean
           is_sale?: boolean | null
           material?: string | null
           name?: string
