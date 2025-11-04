@@ -6,6 +6,8 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useProduct } from "@/hooks/useProducts";
 import { toast } from "sonner";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import SchemaOrg from "@/components/SchemaOrg";
+import { Helmet } from "react-helmet-async";
 
 const Product = () => {
   const { id } = useParams();
@@ -103,9 +105,21 @@ const Product = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-full">
-      {/* Left side - Product images */}
-      <div className="flex-1 flex items-center justify-center py-6 lg:py-16 px-4 lg:px-8 relative">
+    <>
+      <Helmet>
+        <title>{product.name} — ANDO JV</title>
+        <meta name="description" content={product.description || `${product.name} от ANDO JV. Российский бренд современной минималистичной одежды.`} />
+        <meta property="og:title" content={`${product.name} — ANDO JV`} />
+        <meta property="og:description" content={product.description || `${product.name} от ANDO JV`} />
+        <meta property="og:image" content={mainImages[0]} />
+        <meta property="og:type" content="product" />
+      </Helmet>
+      
+      <SchemaOrg type="product" data={product} />
+      
+      <div className="flex flex-col lg:flex-row min-h-full">
+        {/* Left side - Product images */}
+        <div className="flex-1 flex items-center justify-center py-6 lg:py-16 px-4 lg:px-8 relative">
         {/* Left arrow - outside image */}
         {mainImages.length > 1 && (
           <button 
@@ -134,6 +148,8 @@ const Product = () => {
             src={mainImages[currentImage]}
             alt={product.name}
             className="w-full"
+            loading="eager"
+            fetchPriority="high"
           />
 
           {/* Color dots below image */}
@@ -317,6 +333,7 @@ const Product = () => {
         </Collapsible>
       </div>
     </div>
+    </>
   );
 };
 
