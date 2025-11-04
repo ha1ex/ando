@@ -63,7 +63,7 @@ const Header = () => {
           <nav className="hidden lg:flex items-center gap-16">
             <Link 
               to="/catalog" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-3 ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-12 py-6 ${
                 location.pathname === '/catalog' || location.pathname.startsWith('/product/') 
                   ? 'bg-secondary' 
                   : ''
@@ -73,7 +73,7 @@ const Header = () => {
             </Link>
             <Link 
               to="/about" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-3 ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-12 py-6 ${
                 location.pathname === '/about' 
                   ? 'bg-secondary' 
                   : ''
@@ -83,7 +83,7 @@ const Header = () => {
             </Link>
             <Link 
               to="/lookbook" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-3 ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-12 py-6 ${
                 location.pathname === '/lookbook' 
                   ? 'bg-secondary' 
                   : ''
@@ -93,7 +93,7 @@ const Header = () => {
             </Link>
             <Link 
               to="/info" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-3 ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-12 py-6 ${
                 location.pathname === '/info' 
                   ? 'bg-secondary' 
                   : ''
