@@ -52,26 +52,26 @@ const Header = () => {
   return <>
       <header className="sticky top-0 z-40 bg-background border-b border-border">
         <div className="h-40 px-4 lg:px-8">
-          <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center h-full gap-8">
+          <div className="hidden lg:grid lg:grid-cols-[auto_1fr_auto] items-center h-full gap-12">
             {/* Desktop Navigation - left */}
-            <nav className="flex items-center gap-4 justify-start" role="navigation" aria-label="Основная навигация">
-              <Link to="/about" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/about' ? 'bg-secondary' : ''}`}>
+            <nav className="flex items-center gap-2 justify-start" role="navigation" aria-label="Основная навигация">
+              <Link to="/about" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/about' ? 'bg-secondary' : ''}`}>
                 О БРЕНДЕ
               </Link>
-              <Link to="/catalog" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/catalog' || location.pathname.startsWith('/product/') ? 'bg-secondary' : ''}`}>
+              <Link to="/catalog" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/catalog' || location.pathname.startsWith('/product/') ? 'bg-secondary' : ''}`}>
                 КАТАЛОГ
               </Link>
-              <Link to="/lookbook" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/lookbook' ? 'bg-secondary' : ''}`}>
+              <Link to="/lookbook" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/lookbook' ? 'bg-secondary' : ''}`}>
                 LOOKBOOK
               </Link>
-              <Link to="/info" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/info' ? 'bg-secondary' : ''}`}>
+              <Link to="/info" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/info' ? 'bg-secondary' : ''}`}>
                 INFO +
               </Link>
             </nav>
 
             {/* Search Bar - center */}
-            <form onSubmit={handleSearch} className="flex items-center justify-center min-w-[200px] max-w-[300px]">
-              <div className="relative w-full">
+            <form onSubmit={handleSearch} className="flex items-center justify-center px-8">
+              <div className="relative w-full max-w-[280px]">
                 <input 
                   type="search" 
                   placeholder="" 
