@@ -64,46 +64,46 @@ const Header = () => {
   return (
     <>
       <header className="sticky top-0 z-40 bg-background border-b border-border">
-        <div className="flex items-center justify-center h-40 px-4 lg:px-8 relative">
+        <div className="flex items-center justify-between h-24 px-8 lg:px-12">
           
           {/* Desktop Navigation - left */}
-          <nav className="hidden lg:flex items-center gap-16 absolute left-8" role="navigation" aria-label="Основная навигация">
+          <nav className="hidden lg:flex items-center gap-8" role="navigation" aria-label="Основная навигация">
             <Link 
               to="/about" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all ${
                 location.pathname === '/about' 
-                  ? 'bg-secondary' 
-                  : ''
+                  ? 'opacity-100' 
+                  : 'opacity-60'
               }`}
             >
               О БРЕНДЕ
             </Link>
             <Link 
               to="/catalog" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all ${
                 location.pathname === '/catalog' || location.pathname.startsWith('/product/') 
-                  ? 'bg-secondary' 
-                  : ''
+                  ? 'opacity-100' 
+                  : 'opacity-60'
               }`}
             >
               КАТАЛОГ
             </Link>
             <Link 
               to="/lookbook" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all ${
                 location.pathname === '/lookbook' 
-                  ? 'bg-secondary' 
-                  : ''
+                  ? 'opacity-100' 
+                  : 'opacity-60'
               }`}
             >
               LOOKBOOK
             </Link>
             <Link 
               to="/info" 
-              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${
+              className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all ${
                 location.pathname === '/info' 
-                  ? 'bg-secondary' 
-                  : ''
+                  ? 'opacity-100' 
+                  : 'opacity-60'
               }`}
             >
               INFO +
@@ -111,8 +111,8 @@ const Header = () => {
           </nav>
 
           {/* Search Bar - center */}
-          <form onSubmit={handleSearch} className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-64">
-            <div className="relative">
+          <form onSubmit={handleSearch} className="hidden lg:flex items-center justify-center flex-1 max-w-sm mx-auto">
+            <div className="relative w-full">
               <input
                 type="search"
                 placeholder=""
@@ -133,7 +133,7 @@ const Header = () => {
           </button>
 
           {/* Right Icons */}
-          <div className="flex items-center gap-3 lg:gap-6 absolute right-4 lg:right-8">
+          <div className="flex items-center gap-6">
             {/* Search Icon */}
             <button 
               onClick={() => navigate('/catalog')}
