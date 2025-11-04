@@ -510,15 +510,15 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                   >
                     {/* NEW badge - top left */}
                     {product.is_new && (
-                      <div className="absolute top-4 left-4 z-10 bg-foreground text-background px-3 py-1 text-xs font-normal uppercase tracking-wider border border-foreground">
+                      <div className="absolute top-2 left-2 z-10 bg-background/95 backdrop-blur-sm text-foreground px-2 py-1 text-[10px] font-medium uppercase tracking-widest border border-border">
                         NEW
                       </div>
                     )}
                     
-                    {/* Sale badge - bottom left */}
+                    {/* Sale badge - top right */}
                     {product.is_sale && discount > 0 && (
-                      <div className="absolute bottom-4 left-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
-                        {discount}%
+                      <div className="absolute top-2 right-2 z-10 bg-primary/95 backdrop-blur-sm text-primary-foreground px-2 py-0.5 text-[11px] font-medium tabular-nums">
+                        −{discount}%
                       </div>
                     )}
                     <img
