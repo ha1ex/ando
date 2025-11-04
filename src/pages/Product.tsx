@@ -139,7 +139,7 @@ const Product = () => {
         >
           {/* NEW badge - top left */}
           {product.is_new && (
-            <div className="absolute top-4 left-4 z-10 bg-foreground text-background px-3 py-1 text-xs font-normal uppercase tracking-wider border border-foreground">
+            <div className="absolute top-3 left-3 z-10 bg-background/95 backdrop-blur-sm text-foreground px-2.5 py-1 text-[11px] font-medium uppercase tracking-widest border border-border">
               NEW
             </div>
           )}
@@ -192,8 +192,8 @@ const Product = () => {
             {product.name}
           </h1>
           {product.is_sale && discount > 0 && (
-            <div className="bg-black text-white w-14 h-14 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ml-4">
-              {discount}%
+            <div className="bg-primary/10 text-primary px-2.5 py-1 text-[11px] font-medium tabular-nums border border-primary/20 ml-3 flex-shrink-0">
+              −{discount}%
             </div>
           )}
         </div>
