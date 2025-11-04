@@ -102,16 +102,20 @@ const Home = () => {
             aria-label={slide.title}
           >
             <div className="absolute inset-0 bg-black/20" />
-            <div className="relative h-full flex flex-col items-center justify-center text-white px-4 lg:px-8">
+            <div className="relative h-full flex items-center justify-center text-white px-4 lg:px-8">
               {slide.title && (
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 lg:mb-6 tracking-[0.3em] uppercase text-center max-w-4xl">
-                  {slide.title}
-                </h1>
-              )}
-              {slide.subtitle && (
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-12 lg:mb-16 tracking-[0.15em] text-center max-w-2xl">
-                  {slide.subtitle}
-                </p>
+                <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-center justify-center">
+                  <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 text-center" style={{ writingMode: 'vertical-rl' }}>
+                    {slide.title.split(' ').map((word, i) => (
+                      <h1 
+                        key={i}
+                        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light tracking-[0.3em] uppercase"
+                      >
+                        {word}
+                      </h1>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </div>
