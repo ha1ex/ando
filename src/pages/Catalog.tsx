@@ -457,6 +457,14 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                   >
+                    {/* NEW badge - top left */}
+                    {product.is_new && (
+                      <div className="absolute top-4 left-4 z-10 bg-background text-foreground px-3 py-1 text-xs font-normal uppercase tracking-wider">
+                        NEW
+                      </div>
+                    )}
+                    
+                    {/* Sale badge - bottom left */}
                     {product.is_sale && discount > 0 && (
                       <div className="absolute bottom-4 left-4 z-10 bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center text-xs font-normal">
                         {discount}%

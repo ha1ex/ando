@@ -81,6 +81,13 @@ const Favorites = () => {
                 <div key={product.id} className="group relative">
                   <Link to={`/product/${product.slug}`} className="block">
                     <div className="aspect-[3/4] overflow-hidden bg-muted mb-3 relative">
+                      {/* NEW badge - top left */}
+                      {product.is_new && (
+                        <div className="absolute top-4 left-4 z-10 bg-background text-foreground px-3 py-1 text-xs font-normal uppercase tracking-wider">
+                          NEW
+                        </div>
+                      )}
+                      
                       {mainImage ? (
                         <img
                           src={mainImage}

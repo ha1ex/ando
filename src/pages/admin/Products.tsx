@@ -41,6 +41,7 @@ interface Product {
   price: number;
   old_price: number | null;
   is_sale: boolean;
+  is_new: boolean;
   stock_quantity: number;
   category_id: string | null;
   display_order: number;
@@ -68,6 +69,7 @@ const AdminProducts = () => {
     price: '',
     old_price: '',
     is_sale: false,
+    is_new: false,
     stock_quantity: '0',
     category_id: '',
     material: '',
@@ -179,6 +181,7 @@ const AdminProducts = () => {
         price: parseFloat(formData.price),
         old_price: formData.old_price ? parseFloat(formData.old_price) : null,
         is_sale: formData.is_sale,
+        is_new: formData.is_new,
         stock_quantity: parseInt(formData.stock_quantity),
         category_id: formData.category_id || null,
         material: formData.material.trim() || null,
@@ -258,6 +261,7 @@ const AdminProducts = () => {
       price: '',
       old_price: '',
       is_sale: false,
+      is_new: false,
       stock_quantity: '0',
       category_id: '',
       material: '',
@@ -381,6 +385,7 @@ const AdminProducts = () => {
       price: data.price.toString(),
       old_price: data.old_price?.toString() || '',
       is_sale: data.is_sale,
+      is_new: data.is_new || false,
       stock_quantity: data.stock_quantity.toString(),
       category_id: data.category_id || '',
       material: data.material || '',
@@ -502,6 +507,17 @@ const AdminProducts = () => {
                           }
                         />
                         <Label htmlFor="is_sale">Распродажа</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="is_new"
+                          checked={formData.is_new}
+                          onCheckedChange={(checked) =>
+                            setFormData({ ...formData, is_new: checked as boolean })
+                          }
+                        />
+                        <Label htmlFor="is_new">Новинка (бейдж NEW)</Label>
                       </div>
 
                       <div>

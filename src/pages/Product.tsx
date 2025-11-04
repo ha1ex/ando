@@ -115,11 +115,18 @@ const Product = () => {
 
         {/* Image container */}
         <div 
-          className="max-w-xl w-full"
+          className="max-w-xl w-full relative"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
         >
+          {/* NEW badge - top left */}
+          {product.is_new && (
+            <div className="absolute top-4 left-4 z-10 bg-background text-foreground px-3 py-1 text-xs font-normal uppercase tracking-wider">
+              NEW
+            </div>
+          )}
+          
           <img
             src={mainImages[currentImage]}
             alt={product.name}
