@@ -51,43 +51,41 @@ const Header = () => {
   };
   return <>
       <header className="sticky top-0 z-40 bg-background border-b border-border">
-        <div className="flex items-center justify-center h-40 px-4 lg:px-8 relative">
-          
-          {/* Desktop Navigation - left */}
-          <nav className="hidden lg:flex items-center gap-16 absolute left-8" role="navigation" aria-label="Основная навигация">
-            <Link to="/about" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/about' ? 'bg-secondary' : ''}`}>
-              О БРЕНДЕ
-            </Link>
-            <Link to="/catalog" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/catalog' || location.pathname.startsWith('/product/') ? 'bg-secondary' : ''}`}>
-              КАТАЛОГ
-            </Link>
-            <Link to="/lookbook" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/lookbook' ? 'bg-secondary' : ''}`}>
-              LOOKBOOK
-            </Link>
-            <Link to="/info" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/info' ? 'bg-secondary' : ''}`}>
-              INFO +
-            </Link>
-          </nav>
+        <div className="h-40 px-4 lg:px-8">
+          <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] items-center h-full gap-8">
+            {/* Desktop Navigation - left */}
+            <nav className="flex items-center gap-4 justify-start" role="navigation" aria-label="Основная навигация">
+              <Link to="/about" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/about' ? 'bg-secondary' : ''}`}>
+                О БРЕНДЕ
+              </Link>
+              <Link to="/catalog" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/catalog' || location.pathname.startsWith('/product/') ? 'bg-secondary' : ''}`}>
+                КАТАЛОГ
+              </Link>
+              <Link to="/lookbook" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/lookbook' ? 'bg-secondary' : ''}`}>
+                LOOKBOOK
+              </Link>
+              <Link to="/info" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-4 py-2 whitespace-nowrap ${location.pathname === '/info' ? 'bg-secondary' : ''}`}>
+                INFO +
+              </Link>
+            </nav>
 
-          {/* Search Bar - center */}
-          <form onSubmit={handleSearch} className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-64">
-            <div className="relative">
-              <input type="search" placeholder="" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} aria-label="Поиск товаров" className="w-full bg-transparent border-0 border-b border-border px-0 py-2 text-sm focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground text-center mx-[250px]" />
-            </div>
-          </form>
+            {/* Search Bar - center */}
+            <form onSubmit={handleSearch} className="flex items-center justify-center min-w-[200px] max-w-[300px]">
+              <div className="relative w-full">
+                <input 
+                  type="search" 
+                  placeholder="" 
+                  value={searchQuery} 
+                  onChange={e => setSearchQuery(e.target.value)} 
+                  aria-label="Поиск товаров" 
+                  className="w-full bg-transparent border-0 border-b border-border px-2 py-2 text-sm focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground text-center" 
+                />
+                <Search className="w-4 h-4 absolute right-0 top-1/2 -translate-y-1/2 opacity-60 pointer-events-none" />
+              </div>
+            </form>
 
-          {/* Mobile Menu Button */}
-          <button className="lg:hidden hover:opacity-60 transition-opacity" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            <MenuIcon className="w-5 h-5" />
-          </button>
-
-          {/* Right Icons */}
-          <div className="flex items-center gap-3 lg:gap-6 absolute right-4 lg:right-8">
-            {/* Search Icon */}
-            <button onClick={() => navigate('/catalog')} className="hover:opacity-60 transition-opacity" aria-label="Поиск">
-              <Search className="w-5 h-5" />
-            </button>
-
+            {/* Right Icons */}
+            <div className="flex items-center gap-6 justify-end">
             {/* Cart */}
             <button onClick={() => setIsCartOpen(true)} className="hover:opacity-60 transition-opacity relative" aria-label="Корзина">
               <ShoppingCart className="w-5 h-5" />
@@ -134,6 +132,70 @@ const Header = () => {
               </DropdownMenu> : <Button variant="ghost" size="icon" onClick={() => navigate('/auth')} className="hover:opacity-60 transition-opacity">
                 <User className="w-5 h-5" />
               </Button>}
+            </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="lg:hidden flex items-center justify-between h-full">
+            {/* Mobile Menu Button */}
+            <button className="hover:opacity-60 transition-opacity" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              <MenuIcon className="w-5 h-5" />
+            </button>
+
+            {/* Mobile Right Icons */}
+            <div className="flex items-center gap-3">
+              {/* Search Icon */}
+              <button onClick={() => navigate('/catalog')} className="hover:opacity-60 transition-opacity" aria-label="Поиск">
+                <Search className="w-5 h-5" />
+              </button>
+
+              {/* Cart */}
+              <button onClick={() => setIsCartOpen(true)} className="hover:opacity-60 transition-opacity relative" aria-label="Корзина">
+                <ShoppingCart className="w-5 h-5" />
+                {totalItems > 0 && <span className="absolute -top-2 -right-2 bg-foreground text-background text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                    {totalItems}
+                  </span>}
+              </button>
+
+              {/* Favorites - hidden on small mobile */}
+              <Link to="/favorites" className="hidden sm:block hover:opacity-60 transition-opacity">
+                <Heart className="w-5 h-5" />
+              </Link>
+              
+              {/* User Menu */}
+              {user ? <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="hover:opacity-60 transition-opacity">
+                      <User className="w-5 h-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="bg-background z-50">
+                    <DropdownMenuLabel>
+                      <User className="w-4 h-4 inline mr-2" />
+                      Мой аккаунт
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {isAdmin && <DropdownMenuItem onClick={() => navigate('/admin/orders')}>
+                        <ShieldCheck className="w-4 h-4 mr-2" />
+                        Админ-панель
+                      </DropdownMenuItem>}
+                    <DropdownMenuItem onClick={() => navigate('/favorites')}>
+                      <Heart className="w-4 h-4 mr-2" />
+                      Избранное
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/orders')}>
+                      <Package className="w-4 h-4 mr-2" />
+                      Мои заказы
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Выйти
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu> : <Button variant="ghost" size="icon" onClick={() => navigate('/auth')} className="hover:opacity-60 transition-opacity">
+                  <User className="w-5 h-5" />
+                </Button>}
+            </div>
           </div>
         </div>
 
