@@ -99,7 +99,7 @@ export function AppSidebar({
       </div>
 
       {/* Фиксированный блок внизу */}
-      <div className="absolute bottom-0 left-0 right-0 text-base text-center leading-snug text-muted-foreground pb-4 px-4 bg-muted">
+      <div className="absolute bottom-0 left-0 right-0 text-xs text-center leading-snug text-muted-foreground pb-4 px-4 bg-muted">
         © 2025 ANDO JV. Все права<br />
         защищены. Не является публичной<br />
         офертой.
