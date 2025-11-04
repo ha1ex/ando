@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Search, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 
 interface ProductSearchProps {
   onSearch: (query: string) => void;
@@ -24,31 +24,18 @@ const ProductSearch = ({ onSearch, initialValue = "" }: ProductSearchProps) => {
     onSearch(debouncedQuery);
   }, [debouncedQuery, onSearch]);
 
-  const handleClear = useCallback(() => {
-    setSearchQuery("");
-  }, []);
-
   return (
-    <div className="relative flex-1 max-w-md">
+    <div className="relative w-full">
       <input
-        type="search"
-        placeholder="Поиск товаров..."
+        type="text"
+        placeholder=""
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full bg-transparent border-0 border-b border-border px-0 py-2 text-sm focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground"
+        className="w-full bg-transparent border-0 border-b border-border px-2 py-2 text-sm focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground text-center"
         aria-label="Поиск товаров"
       />
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-        {searchQuery && (
-          <button
-            onClick={handleClear}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Очистить поиск"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
-        <Search className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
+      <div className="absolute right-0 top-1/2 -translate-y-1/2">
+        <Search className="w-4 h-4 text-muted-foreground opacity-60" aria-hidden="true" />
       </div>
     </div>
   );
