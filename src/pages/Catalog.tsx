@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ChevronDown, X, Heart } from "lucide-react";
+import { ChevronDown, X, Heart, Grid3x3, LayoutGrid } from "lucide-react";
 import { useProducts, useCategories, useProductFilters, ProductFilters } from "@/hooks/useProducts";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,6 +21,7 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<ProductFilters>({});
   const { query: searchQuery } = useCatalogSearch();
+  const [gridCols, setGridCols] = useState<3 | 4>(3);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>(
     searchParams.get("materials")?.split(",").filter(Boolean) || []
   );
@@ -321,12 +322,38 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
             )}
           </div>
 
-          {/* Sorting */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-            <span className="text-muted-foreground text-xs lg:text-sm">
-              Найдено: {sortedProducts.length}
-              {searchQuery && ` по запросу "${searchQuery}"`}
-            </span>
+          {/* View & Sorting */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 justify-between w-full">
+            <div className="flex items-center gap-4">
+              {/* Grid View Toggle */}
+              <div className="flex items-center gap-1 border border-border rounded-sm p-0.5">
+                <button
+                  onClick={() => setGridCols(3)}
+                  className={`p-1.5 transition-colors ${
+                    gridCols === 3 ? 'bg-secondary' : 'hover:bg-secondary/50'
+                  }`}
+                  aria-label="3 карточки в строку"
+                  title="3 карточки"
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setGridCols(4)}
+                  className={`p-1.5 transition-colors ${
+                    gridCols === 4 ? 'bg-secondary' : 'hover:bg-secondary/50'
+                  }`}
+                  aria-label="4 карточки в строку"
+                  title="4 карточки"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+              </div>
+
+              <span className="text-muted-foreground text-xs lg:text-sm">
+                Найдено: {sortedProducts.length}
+                {searchQuery && ` по запросу "${searchQuery}"`}
+              </span>
+            </div>
             <Popover>
               <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 hover:opacity-60 transition-opacity text-xs lg:text-sm min-h-[44px] px-3">
@@ -388,7 +415,12 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
           )}
         </div>
       ) : (
-        <section className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 lg:px-8 lg:py-6" aria-label="Список товаров">
+        <section 
+          className={`grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 ${
+            gridCols === 3 ? 'md:grid-cols-3 lg:grid-cols-3' : 'md:grid-cols-3 lg:grid-cols-4'
+          } gap-3 sm:gap-4 lg:gap-6 p-3 sm:p-4 lg:px-8 lg:py-6`} 
+          aria-label="Список товаров"
+        >
           {sortedProducts.map((product) => {
             const images = product.product_images && product.product_images.length > 0
               ? product.product_images.map(img => img.image_url)
