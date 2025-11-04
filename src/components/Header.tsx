@@ -55,12 +55,10 @@ const Header = () => {
   return (
     <>
       <header className="sticky top-0 z-40 bg-background border-b border-border">
-        <div className="flex items-center justify-between h-40 px-4 lg:px-8">
-          {/* Left spacer - hidden on mobile */}
-          <div className="hidden lg:block flex-1" />
+        <div className="flex items-center justify-center h-40 px-4 lg:px-8 relative">
           
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-16">
+          {/* Desktop Navigation - centered */}
+          <nav className="hidden lg:flex items-center gap-16 absolute left-1/2 transform -translate-x-1/2">
             <Link 
               to="/catalog" 
               className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-12 py-6 ${
@@ -112,7 +110,7 @@ const Header = () => {
           </button>
 
           {/* Right Icons */}
-          <div className="flex-1 flex items-center justify-end gap-3 lg:gap-6">
+          <div className="flex items-center gap-3 lg:gap-6 absolute right-4 lg:right-8">
             {/* Cart */}
             <button 
               onClick={() => setIsCartOpen(true)}
