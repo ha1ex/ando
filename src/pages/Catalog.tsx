@@ -19,7 +19,13 @@ interface CatalogProps {
 const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<ProductFilters>({});
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Sync search query from URL params
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || "";
+    setSearchQuery(urlSearch);
+  }, [searchParams]);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>(
     searchParams.get("materials")?.split(",").filter(Boolean) || []
   );
