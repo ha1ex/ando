@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ShoppingCart, Heart, User, LogOut, Menu as MenuIcon, ShieldCheck, Package, Search } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CartDrawer from "./CartDrawer";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +11,7 @@ const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const searchTimerRef = useRef<NodeJS.Timeout | null>(null);
   const {
     totalItems
   } = useCart();
@@ -22,6 +23,12 @@ const Header = () => {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Read search from URL and sync to local state
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || "";
+    setSearchQuery(urlSearch);
+  }, [searchParams]);
   useEffect(() => {
     const checkAdminRole = async () => {
       if (!user) {
@@ -44,22 +51,34 @@ const Header = () => {
     navigate('/');
   };
 
-  // Update URL with debounce when typing
-  useEffect(() => {
-    if (location.pathname !== '/catalog') return;
+  // Handle search input change with debounce
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
     
-    const timer = setTimeout(() => {
+    // Clear existing timer
+    if (searchTimerRef.current) {
+      clearTimeout(searchTimerRef.current);
+    }
+    
+    // Navigate to catalog if not there
+    if (location.pathname !== '/catalog') {
+      if (value.trim()) {
+        navigate(`/catalog?search=${encodeURIComponent(value.trim())}`);
+      }
+      return;
+    }
+    
+    // Debounce URL update on catalog page
+    searchTimerRef.current = setTimeout(() => {
       const params = new URLSearchParams(searchParams);
-      if (searchQuery.trim()) {
-        params.set('search', searchQuery.trim());
+      if (value.trim()) {
+        params.set('search', value.trim());
       } else {
         params.delete('search');
       }
       setSearchParams(params, { replace: true });
     }, 300);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery, location.pathname]);
+  };
   return <>
       <header className="sticky top-0 z-40 bg-background border-b border-border">
         <div className="h-40 px-4 lg:px-8">
@@ -87,12 +106,7 @@ const Header = () => {
                   type="text"
                   placeholder="" 
                   value={searchQuery} 
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onFocus={() => {
-                    if (location.pathname !== '/catalog') {
-                      navigate('/catalog');
-                    }
-                  }}
+                  onChange={e => handleSearchChange(e.target.value)}
                   aria-label="Поиск товаров" 
                   className="w-full bg-transparent border-0 border-b border-border px-2 py-2 text-sm focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground text-center" 
                 />
