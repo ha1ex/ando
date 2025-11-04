@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHeroSlides } from "@/hooks/useHeroSlides";
 import { ChevronDown } from "lucide-react";
+import SchemaOrg from "@/components/SchemaOrg";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -80,7 +81,10 @@ const Home = () => {
   }
 
   return (
-    <main className={`relative h-[calc(100vh-4rem)] overflow-hidden transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'}`} role="main">
+    <>
+      <SchemaOrg type="organization" />
+      
+      <main className={`relative h-[calc(100vh-4rem)] overflow-hidden transition-opacity duration-500 ${isFading ? 'opacity-0' : 'opacity-100'}`} role="main">
       {activeSlides.map((slide, index) => (
         <section
           key={slide.id}
@@ -142,6 +146,7 @@ const Home = () => {
         </div>
       )}
     </main>
+    </>
   );
 };
 
