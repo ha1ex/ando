@@ -102,26 +102,16 @@ const Home = () => {
             aria-label={slide.title}
           >
             <div className="absolute inset-0 bg-black/20" />
-            <div className="relative h-full flex items-start justify-start text-white px-4 lg:px-8 pt-4">
+            <div className="relative h-full flex flex-col items-center justify-center text-white px-4 lg:px-8">
               {slide.title && (
-                <div className="flex gap-1 items-start justify-start ml-0 sm:ml-4 md:ml-8 lg:ml-12">
-                  {/* Разбиваем текст на слова и отображаем каждое слово вертикально */}
-                  {slide.title.split(' ').map((word, wordIndex) => (
-                    <div 
-                      key={wordIndex}
-                      className="flex flex-col items-center gap-0.5"
-                    >
-                      {word.split('').map((letter, letterIndex) => (
-                        <span 
-                          key={letterIndex}
-                          className="text-xs sm:text-sm md:text-base font-light tracking-wider uppercase leading-tight"
-                        >
-                          {letter}
-                        </span>
-                      ))}
-                    </div>
-                  ))}
-                </div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-3 sm:mb-4 lg:mb-6 tracking-[0.3em] uppercase text-center max-w-4xl">
+                  {slide.title}
+                </h1>
+              )}
+              {slide.subtitle && (
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-8 sm:mb-12 lg:mb-16 tracking-[0.15em] text-center max-w-2xl">
+                  {slide.subtitle}
+                </p>
               )}
             </div>
           </div>
