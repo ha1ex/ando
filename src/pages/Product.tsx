@@ -305,7 +305,7 @@ const Product = () => {
               to="/info?section=delivery" 
               className="text-sm underline hover:no-underline inline-block mt-2"
             >
-              Подробнее на странице Доставка
+              Подробнее на странице Оплата и доставка
             </Link>
           </CollapsibleContent>
         </Collapsible>
