@@ -132,17 +132,7 @@ const Product = () => {
       
       <div className="flex flex-col lg:flex-row min-h-full">
         {/* Left side - Product images */}
-        <div className="flex-1 flex items-center justify-center py-6 lg:py-16 px-4 lg:px-8 relative">
-        {/* Left arrow - closer to image */}
-        {mainImages.length > 1 && (
-          <button 
-            onClick={() => setCurrentImage((prev) => (prev - 1 + mainImages.length) % mainImages.length)}
-            className="absolute left-[5%] lg:left-[10%] top-1/2 -translate-y-1/2 z-10 hover:opacity-60 transition-opacity bg-background/80 backdrop-blur-sm rounded-full p-2"
-          >
-            <ChevronLeft className="w-5 h-5 lg:w-6 lg:h-6" />
-          </button>
-        )}
-
+        <div className="flex-1 flex items-center justify-center py-6 lg:py-16 px-12 lg:px-16 relative">
         {/* Image container */}
         <div 
           ref={imageRef}
@@ -194,11 +184,21 @@ const Product = () => {
           )}
         </div>
 
-        {/* Right arrow - closer to image */}
+        {/* Left arrow - outside image */}
+        {mainImages.length > 1 && (
+          <button 
+            onClick={() => setCurrentImage((prev) => (prev - 1 + mainImages.length) % mainImages.length)}
+            className="absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-10 hover:opacity-60 transition-opacity bg-background/80 backdrop-blur-sm rounded-full p-2"
+          >
+            <ChevronLeft className="w-5 h-5 lg:w-6 lg:h-6" />
+          </button>
+        )}
+
+        {/* Right arrow - outside image */}
         {mainImages.length > 1 && (
           <button 
             onClick={() => setCurrentImage((prev) => (prev + 1) % mainImages.length)}
-            className="absolute right-[5%] lg:right-[10%] top-1/2 -translate-y-1/2 z-10 hover:opacity-60 transition-opacity bg-background/80 backdrop-blur-sm rounded-full p-2"
+            className="absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-10 hover:opacity-60 transition-opacity bg-background/80 backdrop-blur-sm rounded-full p-2"
           >
             <ChevronRight className="w-5 h-5 lg:w-6 lg:h-6" />
           </button>
