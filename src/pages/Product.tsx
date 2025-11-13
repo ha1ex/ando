@@ -151,6 +151,13 @@ const Product = () => {
             </div>
           )}
           
+          {/* SALE badge - top left (below NEW if both present) */}
+          {product.is_sale && discount > 0 && (
+            <div className={`absolute ${product.is_new ? 'top-14' : 'top-3'} left-3 z-10 bg-primary/10 text-primary px-2.5 py-1 text-[11px] font-medium uppercase tracking-widest border border-primary/20`}>
+              SALE −{discount}%
+            </div>
+          )}
+          
           <img
             src={mainImages[currentImage]}
             alt={product.name}
