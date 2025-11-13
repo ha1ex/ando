@@ -82,13 +82,20 @@ const Catalog = ({ selectedCategory, setSelectedCategory }: CatalogProps) => {
     if (selectedCategory === "Все товары") {
       newFilters.categoryId = null;
       newFilters.isSale = false;
-    } else if (selectedCategory === "SALE %") {
+      newFilters.isNew = false;
+    } else if (selectedCategory === "SALE" || selectedCategory === "SALE %") {
       newFilters.categoryId = null;
       newFilters.isSale = true;
+      newFilters.isNew = false;
+    } else if (selectedCategory === "NEW") {
+      newFilters.categoryId = null;
+      newFilters.isSale = false;
+      newFilters.isNew = true;
     } else {
       const category = categories.find((cat) => cat.name === selectedCategory);
       newFilters.categoryId = category?.id || null;
       newFilters.isSale = false;
+      newFilters.isNew = false;
     }
 
     if (selectedMaterials.length > 0) {

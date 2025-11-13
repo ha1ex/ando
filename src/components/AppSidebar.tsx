@@ -86,12 +86,18 @@ export function AppSidebar({
             </div>}
 
           {isCatalogRelated && <nav className="space-y-2 flex flex-col pl-6 mx-[55px]">
+              <Link to="/catalog" onClick={() => onCategoryChange?.("NEW")} className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${selectedCategory === "NEW" ? "underline" : ""}`}>
+                NEW
+              </Link>
               <Link to="/catalog" onClick={() => onCategoryChange?.("Все товары")} className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${selectedCategory === "Все товары" ? "underline" : ""}`}>
                 Все товары
               </Link>
               {!isLoading && categories?.map(category => <Link key={category.id} to="/catalog" onClick={() => onCategoryChange?.(category.name)} className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${category.name === selectedCategory ? "underline" : ""}`}>
                   {category.name}
                 </Link>)}
+              <Link to="/catalog" onClick={() => onCategoryChange?.("SALE")} className={`block w-full text-left text-sm tracking-wide hover:opacity-60 transition-opacity ${selectedCategory === "SALE" ? "underline" : ""}`}>
+                SALE
+              </Link>
             </nav>}
 
           {isInfoPage && <nav className="space-y-2 flex flex-col pl-6 my-0 px-[55px] mx-[53px]">

@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 export interface ProductFilters {
   categoryId?: string | null;
   isSale?: boolean;
+  isNew?: boolean;
   materials?: string[];
   colors?: string[];
   sizes?: string[];
@@ -35,6 +36,10 @@ export const useProducts = (filters?: ProductFilters) => {
 
       if (filters?.isSale) {
         query = query.eq('is_sale', true);
+      }
+
+      if (filters?.isNew) {
+        query = query.eq('is_new', true);
       }
 
       if (filters?.minPrice !== undefined) {
