@@ -819,7 +819,8 @@ const AdminProducts = () => {
                 <TableHead>Slug</TableHead>
                 <TableHead>Цена</TableHead>
                 <TableHead>Склад</TableHead>
-                <TableHead>Распродажа</TableHead>
+                <TableHead>NEW</TableHead>
+                <TableHead>SALE</TableHead>
                 <TableHead>Действия</TableHead>
               </TableRow>
             </TableHeader>
@@ -842,7 +843,8 @@ const AdminProducts = () => {
                   </TableCell>
                   <TableCell>{product.price} ₽</TableCell>
                   <TableCell>{product.stock_quantity}</TableCell>
-                  <TableCell>{product.is_sale ? 'Да' : 'Нет'}</TableCell>
+                  <TableCell>{product.is_new ? '✓' : '—'}</TableCell>
+                  <TableCell>{product.is_sale ? '✓' : '—'}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button
