@@ -177,13 +177,11 @@ const Product = () => {
                 <button
                   key={idx}
                   onClick={() => setCurrentImage(idx)}
-                  className={`h-10 px-3 flex items-center justify-center rounded-full transition-all ${
-                    idx === currentImage ? "bg-primary" : "bg-transparent"
-                  }`}
+                  className="p-1"
                   aria-label={`Фото ${idx + 1}`}
                 >
-                  <span className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    idx === currentImage ? "bg-primary-foreground w-8" : "bg-muted"
+                  <span className={`block w-2 h-2 rounded-full transition-all ${
+                    idx === currentImage ? "bg-foreground" : "bg-muted"
                   }`} />
                 </button>
               ))}
