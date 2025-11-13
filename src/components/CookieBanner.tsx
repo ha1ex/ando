@@ -36,7 +36,7 @@ export function CookieBanner() {
             </p>
             <p className="text-xs text-muted-foreground">
               Продолжая использовать сайт, вы соглашаетесь с{" "}
-              <Link to="/info?section=agreement" className="underline hover:no-underline">
+              <Link to="/info?section=privacy" className="underline hover:no-underline">
                 политикой конфиденциальности
               </Link>
               .
