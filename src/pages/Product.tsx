@@ -219,27 +219,27 @@ const Product = () => {
                   />
                 </TransformComponent>
               </TransformWrapper>
-
-              {/* Navigation arrows */}
-              {mainImages.length > 1 && (
-                <>
-                  <button
-                    onClick={goToPrevImage}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full border border-border hover:bg-background transition-colors z-10"
-                    aria-label="Предыдущее фото"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={goToNextImage}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full border border-border hover:bg-background transition-colors z-10"
-                    aria-label="Следующее фото"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
             </div>
+
+            {/* Navigation arrows - outside overflow-hidden for proper positioning */}
+            {mainImages.length > 1 && (
+              <>
+                <button
+                  onClick={goToPrevImage}
+                  className="absolute left-2 sm:left-0 md:-left-[30px] top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full border border-border hover:bg-background transition-colors z-10"
+                  aria-label="Предыдущее фото"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={goToNextImage}
+                  className="absolute right-2 sm:right-0 md:-right-[30px] top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full border border-border hover:bg-background transition-colors z-10"
+                  aria-label="Следующее фото"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
 
             {/* Dots below image */}
             {mainImages.length > 1 && (
