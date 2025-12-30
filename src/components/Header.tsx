@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { ShoppingCart, Heart, User, LogOut, Menu as MenuIcon, ShieldCheck, Package, Search, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import ProductSearch from "./ProductSearch";
@@ -24,6 +24,8 @@ const Header = () => {
   } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const currentGender = searchParams.get('gender') || 'women';
   const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
     const checkAdminRole = async () => {
@@ -52,11 +54,11 @@ const Header = () => {
           <div className="hidden lg:grid lg:grid-cols-[auto_1fr_auto] items-center h-full gap-12">
             {/* Desktop Navigation - left */}
             <nav className="flex items-center gap-2 justify-start" role="navigation" aria-label="Основная навигация">
-              <Link to="/about" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/about' ? 'bg-secondary' : ''}`}>
-                О БРЕНДЕ
+              <Link to="/catalog?gender=women" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${(location.pathname === '/catalog' || location.pathname.startsWith('/product/')) && currentGender === 'women' ? 'bg-secondary' : ''}`}>
+                ДЛЯ НЕЁ
               </Link>
-              <Link to="/catalog" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/catalog' || location.pathname.startsWith('/product/') ? 'bg-secondary' : ''}`}>
-                КАТАЛОГ
+              <Link to="/catalog?gender=men" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${(location.pathname === '/catalog' || location.pathname.startsWith('/product/')) && currentGender === 'men' ? 'bg-secondary' : ''}`}>
+                ДЛЯ НЕГО
               </Link>
               <Link to="/lookbook" className={`text-sm uppercase tracking-[0.2em] hover:opacity-60 transition-all px-6 py-6 whitespace-nowrap ${location.pathname === '/lookbook' ? 'bg-secondary' : ''}`}>
                 LOOKBOOK
@@ -239,11 +241,11 @@ const Header = () => {
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && <div className="lg:hidden border-t border-border bg-background">
             <nav className="flex flex-col py-4" role="navigation" aria-label="Мобильная навигация">
-              <Link to="/about" className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                О БРЕНДЕ
+              <Link to="/catalog?gender=women" className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                ДЛЯ НЕЁ
               </Link>
-              <Link to="/catalog" className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-                КАТАЛОГ
+              <Link to="/catalog?gender=men" className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                ДЛЯ НЕГО
               </Link>
               <Link to="/lookbook" className="px-6 py-3 text-sm uppercase tracking-[0.2em] hover:bg-muted transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
                 LOOKBOOK

@@ -548,6 +548,17 @@ const Catalog = ({ selectedCategory, setSelectedCategory, selectedGender, setSel
     if (minFromUrl) usePriceFilterStore.getState().setMin(minFromUrl);
     if (maxFromUrl) usePriceFilterStore.getState().setMax(maxFromUrl);
   }, []);
+
+  // Читаем gender из URL и устанавливаем в state
+  useEffect(() => {
+    const genderFromUrl = searchParams.get("gender");
+    if (genderFromUrl && (genderFromUrl === "women" || genderFromUrl === "men")) {
+      setSelectedGender(genderFromUrl);
+    } else if (!selectedGender) {
+      // По умолчанию women если не указано
+      setSelectedGender("women");
+    }
+  }, [searchParams, setSelectedGender]);
   
   const { data: categories = [] } = useCategories();
   const { data: filterOptions } = useProductFilters();
@@ -570,6 +581,9 @@ const Catalog = ({ selectedCategory, setSelectedCategory, selectedGender, setSel
   useEffect(() => {
     setSearchParams(currentParams => {
       const params = new URLSearchParams();
+      // Сохраняем gender параметр
+      const currentGender = currentParams.get("gender");
+      if (currentGender) params.set("gender", currentGender);
       if (selectedMaterials.length > 0) params.set("materials", selectedMaterials.join(","));
       if (selectedColors.length > 0) params.set("colors", selectedColors.join(","));
       if (selectedSizes.length > 0) params.set("sizes", selectedSizes.join(","));
