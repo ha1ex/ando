@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { sortSizes } from '@/lib/sizeUtils';
 
 export interface ProductFilters {
   categoryId?: string | null;
@@ -99,7 +100,7 @@ export const useProductFilters = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('products')
-        .select('material, available_colors, available_sizes, price');
+        .select('material, available_colors, available_sizes, size_quantities, price');
 
       if (error) throw error;
 
@@ -114,9 +115,20 @@ export const useProductFilters = () => {
         if (product.available_colors) {
           product.available_colors.forEach((color: string) => colors.add(color));
         }
-        if (product.available_sizes) {
+        // Берём размеры только с quantity > 0 из size_quantities
+        const sizeQty = (product.size_quantities as Record<string, number>) || {};
+        const hasQtyData = Object.keys(sizeQty).length > 0;
+
+        if (hasQtyData) {
+          // Новая логика: только размеры в наличии
+          Object.entries(sizeQty).forEach(([size, qty]) => {
+            if (qty > 0) sizes.add(size);
+          });
+        } else if (product.available_sizes) {
+          // Fallback для старых данных
           product.available_sizes.forEach((size: string) => sizes.add(size));
         }
+
         if (product.price) {
           minPrice = Math.min(minPrice, Number(product.price));
           maxPrice = Math.max(maxPrice, Number(product.price));
@@ -126,7 +138,7 @@ export const useProductFilters = () => {
       return {
         materials: Array.from(materials).sort(),
         colors: Array.from(colors).sort(),
-        sizes: Array.from(sizes).sort(),
+        sizes: sortSizes(Array.from(sizes)),
         priceRange: { min: minPrice === Infinity ? 0 : minPrice, max: maxPrice }
       };
     },
