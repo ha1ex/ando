@@ -27,6 +27,7 @@ import LookbookDetail from "./pages/LookbookDetail";
 import About from "./pages/About";
 import Info from "./pages/Info";
 import Auth from "./pages/Auth";
+import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import AdminOrders from "./pages/admin/Orders";
@@ -107,6 +108,7 @@ const AppContent = () => {
             element={<Info activeSection={activeInfoSection} setActiveSection={setActiveInfoSection} />} 
           />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/install" element={<Install />} />
