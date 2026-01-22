@@ -35,7 +35,7 @@ if (empty($name) || empty($email) || empty($message)) {
 }
 
 // Email settings
-$to = 's_anufriev@list.ru'; // TODO: Change to info@andojv.com for production
+$to = 'info@andojv.com';
 $subject = 'Новый вопрос от покупателя - ANDO JV';
 
 $body = "
