@@ -26,13 +26,13 @@ export const CatalogSearchProvider: React.FC<{ children: React.ReactNode }> = ({
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Sync with URL on mount
+  // Sync with URL on mount and when URL search param changes externally
+  const urlSearchParam = searchParams.get('search') || '';
   useEffect(() => {
-    const urlQuery = searchParams.get('search') || '';
-    if (urlQuery !== state.query) {
-      setState(prev => ({ ...prev, query: urlQuery }));
+    if (urlSearchParam !== state.query) {
+      setState(prev => ({ ...prev, query: urlSearchParam }));
     }
-  }, []); // Only on mount
+  }, [urlSearchParam]); // Re-sync when URL search param changes
 
   // Update URL when query changes (debounced)
   const updateURL = useCallback((query: string) => {
