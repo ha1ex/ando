@@ -32,6 +32,7 @@ interface Order {
   customer_email: string;
   customer_phone: string;
   delivery_address: string;
+  notes?: string;
   created_at: string;
 }
 
@@ -145,13 +146,14 @@ const AdminOrders = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Номер заказа', 'Клиент', 'Email', 'Телефон', 'Сумма', 'Статус', 'Дата'];
+    const headers = ['Номер заказа', 'Клиент', 'Email', 'Телефон', 'Сумма', 'Комментарий', 'Статус', 'Дата'];
     const csvData = filteredOrders.map(order => [
       order.order_number,
       order.customer_name,
       order.customer_email,
       order.customer_phone,
       order.total_amount,
+      `"${(order.notes || '').replace(/"/g, '""')}"`,
       order.status,
       new Date(order.created_at).toLocaleDateString('ru-RU')
     ]);
@@ -211,7 +213,7 @@ const AdminOrders = () => {
         </CardHeader>
         <CardContent>
           <DualScrollTable>
-            <div className="min-w-[1100px]">
+            <div className="min-w-[1300px]">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -220,6 +222,7 @@ const AdminOrders = () => {
                     <TableHead>Email</TableHead>
                     <TableHead>Телефон</TableHead>
                     <TableHead>Сумма</TableHead>
+                    <TableHead>Комментарий</TableHead>
                     <TableHead>Статус</TableHead>
                     <TableHead>Дата</TableHead>
                   </TableRow>
@@ -227,7 +230,7 @@ const AdminOrders = () => {
                 <TableBody>
                   {filteredOrders.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                      <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                         {searchQuery || statusFilter !== 'all'
                           ? 'Заказы не найдены. Попробуйте изменить фильтры.'
                           : 'Заказы отсутствуют.'}
@@ -243,6 +246,9 @@ const AdminOrders = () => {
                       <TableCell>{order.customer_email}</TableCell>
                       <TableCell>{order.customer_phone}</TableCell>
                       <TableCell>{order.total_amount} ₽</TableCell>
+                      <TableCell className="max-w-[200px] truncate" title={order.notes || ''}>
+                        {order.notes || '—'}
+                      </TableCell>
                       <TableCell>
                         <Select
                           value={order.status}
