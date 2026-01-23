@@ -103,12 +103,11 @@ const Home = () => {
 
       <div
         ref={containerRef}
-        className="h-full overflow-y-auto snap-y snap-mandatory"
-        style={{ scrollBehavior: 'smooth' }}
+        className="h-full overflow-y-auto"
       >
         {/* Hero Section - анимируется при скролле */}
         <main
-          className="relative h-full snap-start overflow-hidden"
+          className="relative h-full overflow-hidden"
           style={{
             opacity: 1 - scrollProgress * 0.7,
             transform: `scale(${1 + scrollProgress * 0.05})`,
@@ -174,7 +173,7 @@ const Home = () => {
         </main>
 
         {/* Spacer section для активации скролла */}
-        <section ref={spacerRef} className="h-screen snap-start bg-background" />
+        <section ref={spacerRef} className="h-screen bg-background" />
       </div>
     </>
   );
