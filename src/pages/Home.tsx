@@ -8,7 +8,6 @@ const Home = () => {
   const navigate = useNavigate();
   const { data: slides, isLoading } = useHeroSlides();
   const containerRef = useRef<HTMLDivElement>(null);
-  const spacerRef = useRef<HTMLElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const activeSlide = slides?.find(slide => slide.is_active);
@@ -16,42 +15,63 @@ const Home = () => {
   const tabletUrl = activeSlide?.image_url_tablet || desktopUrl;
   const mobileUrl = activeSlide?.image_url_mobile || tabletUrl;
 
-  // Scroll hijacking - один скролл вниз запускает полную анимацию
+  // Scroll hijacking с ручной анимацией через requestAnimationFrame
   useEffect(() => {
     const container = containerRef.current;
-    const spacer = spacerRef.current;
-    if (!container || !spacer) return;
+    if (!container) return;
 
     let hasNavigated = false;
     let isAnimating = false;
+    let animationId: number | null = null;
 
-    // Обновление прогресса анимации - используем реальные размеры контейнера
-    const handleScroll = () => {
-      const scrollTop = container.scrollTop;
-      const maxScroll = container.scrollHeight - container.clientHeight;
-      // Прогресс от 0 до 1 на основе реального скролла
-      const progress = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
-      setScrollProgress(progress);
+    // Ручная анимация скролла - гарантированно доходит до конца
+    const animateScroll = () => {
+      const startTime = performance.now();
+      const startScroll = container.scrollTop;
+      // Всегда вычисляем target в момент старта анимации
+      const targetScroll = container.scrollHeight - container.clientHeight;
+      const duration = 800; // мс
 
-      // Переход на середине анимации (50%)
-      if (progress >= 0.5 && !hasNavigated) {
-        hasNavigated = true;
-        navigate('/catalog');
-      }
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutCubic(progress);
+
+        const currentScroll = startScroll + (targetScroll - startScroll) * eased;
+        container.scrollTop = currentScroll;
+
+        // Обновляем визуальный прогресс
+        const visualProgress = targetScroll > 0 ? currentScroll / targetScroll : 0;
+        setScrollProgress(visualProgress);
+
+        // Навигация на 50%
+        if (visualProgress >= 0.5 && !hasNavigated) {
+          hasNavigated = true;
+          navigate('/catalog');
+        }
+
+        if (progress < 1 && !hasNavigated) {
+          animationId = requestAnimationFrame(animate);
+        }
+      };
+
+      animationId = requestAnimationFrame(animate);
     };
 
-    // Запуск анимации - scrollIntoView гарантирует полный скролл
-    const triggerFullScroll = () => {
+    // Запуск анимации
+    const triggerAnimation = () => {
       if (isAnimating || hasNavigated) return;
       isAnimating = true;
-      spacer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      animateScroll();
     };
 
     // Перехват колеса мыши
     const handleWheel = (e: WheelEvent) => {
       if (e.deltaY > 0) {
         e.preventDefault();
-        triggerFullScroll();
+        triggerAnimation();
       }
     };
 
@@ -65,28 +85,31 @@ const Home = () => {
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY;
 
-      // Свайп вверх (скролл вниз)
       if (deltaY > 30) {
         e.preventDefault();
-        triggerFullScroll();
+        triggerAnimation();
       }
     };
 
-    container.addEventListener('scroll', handleScroll, { passive: true });
     container.addEventListener('wheel', handleWheel, { passive: false });
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
     container.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
-      container.removeEventListener('scroll', handleScroll);
       container.removeEventListener('wheel', handleWheel);
       container.removeEventListener('touchmove', handleTouchMove);
       container.removeEventListener('touchstart', handleTouchStart);
+      if (animationId) cancelAnimationFrame(animationId);
     };
   }, [navigate]);
 
+  // Кнопка стрелки тоже запускает анимацию (но нужен ref на triggerAnimation)
+  // Пока используем простой вариант
   const scrollToContent = () => {
-    spacerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const container = containerRef.current;
+    if (!container) return;
+    const target = container.scrollHeight - container.clientHeight;
+    container.scrollTo({ top: target, behavior: 'smooth' });
   };
 
   if (isLoading || !desktopUrl) {
@@ -173,7 +196,7 @@ const Home = () => {
         </main>
 
         {/* Spacer section для активации скролла */}
-        <section ref={spacerRef} className="h-screen bg-background" />
+        <section className="h-screen bg-background" />
       </div>
     </>
   );
