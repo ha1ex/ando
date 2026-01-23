@@ -46,9 +46,10 @@ const Home = () => {
         e.preventDefault();
         isAnimating = true;
 
-        // Плавная прокрутка на всю высоту экрана
+        // Динамически вычисляем максимальную прокрутку (работает при любом zoom/resize)
+        const maxScroll = container.scrollHeight - container.clientHeight;
         container.scrollTo({
-          top: window.innerHeight,
+          top: maxScroll,
           behavior: 'smooth'
         });
       }
@@ -71,8 +72,10 @@ const Home = () => {
         e.preventDefault();
         isAnimating = true;
 
+        // Динамически вычисляем максимальную прокрутку
+        const maxScroll = container.scrollHeight - container.clientHeight;
         container.scrollTo({
-          top: window.innerHeight,
+          top: maxScroll,
           behavior: 'smooth'
         });
       }
@@ -92,7 +95,10 @@ const Home = () => {
   }, [navigate]);
 
   const scrollToContent = () => {
-    containerRef.current?.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    const container = containerRef.current;
+    if (!container) return;
+    const maxScroll = container.scrollHeight - container.clientHeight;
+    container.scrollTo({ top: maxScroll, behavior: 'smooth' });
   };
 
   if (isLoading || !desktopUrl) {
