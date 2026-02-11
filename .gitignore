@@ -11,7 +11,10 @@ lerna-debug.log*
 .env
 .env.local
 .env.*.local
+.env.production
 docker/.env
+docker/.env.production
+docker/nginx/.htpasswd
 
 # Docker volumes (data and storage)
 docker/volumes/db/data/
