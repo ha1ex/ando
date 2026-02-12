@@ -56,7 +56,7 @@ services:
     # Порт НЕ exposed - доступ только из docker network
     volumes:
       # Production data path
-      - /opt/ando/docker/volumes/db:/var/lib/postgresql/data:Z
+      - /opt/ando/docker/volumes/db/data:/var/lib/postgresql/data:Z
       # Init scripts остаются из базового файла
       - ./docker/volumes/db/webhooks.sql:/docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql:Z
       - ./docker/volumes/db/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:Z
