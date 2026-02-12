@@ -17,12 +17,15 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          # Сохранить приватный ключ
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          # Сохранить приватный ключ (с правильными переносами строк)
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
           # Добавить сервер в known_hosts
-          ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -H $SERVER_HOST >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Проверить что ключ валиден
+          ssh-keygen -l -f ~/.ssh/deploy_key || { echo "❌ Ключ поврежден!"; exit 1; }
 
           # Тестовое подключение
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "echo '✅ SSH Connection SUCCESS!' && hostname && uptime"
