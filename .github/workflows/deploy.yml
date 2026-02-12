@@ -1,57 +1,14 @@
-name: Deploy to Production
+name: Deploy
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch: # Ручной запуск
 
 jobs:
   deploy:
-    name: Deploy & Check
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Build application
-        run: |
-          echo "🏗️ Building production bundle..."
-          npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
-          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
-
-      - name: Package & Copy to server
-        run: |
-          echo "📦 Creating archive..."
-          tar -czf dist.tar.gz dist/
-
-          echo "🔑 Setting up SSH..."
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts 2>&1 || true
-
-          echo "🚀 Copying to server..."
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -v dist.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/opt/ando/ 2>&1 || {
-            echo "❌ SCP failed with exit code $?"
-            exit 1
-          }
-
-      - name: Deploy & Restart
+      - name: Deploy to server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -59,28 +16,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /opt/ando
-
-            echo "📂 Extracting build..."
-            rm -rf dist.old
-            [ -d dist ] && mv dist dist.old
-            tar -xzf dist.tar.gz
-            rm dist.tar.gz
-
-            echo "🐳 Restarting nginx..."
+            git pull origin main
+            npm ci --legacy-peer-deps
+            npm run build
             docker compose restart nginx
-            sleep 5
-
-      - name: Check if shop is alive
-        run: |
-          echo "🔍 Checking if shop is alive..."
-
-          # Проверка что сайт отвечает 200 OK
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://83.166.246.253/)
-
-          if [ "$HTTP_CODE" = "200" ]; then
-            echo "✅ Shop is ALIVE (HTTP $HTTP_CODE)"
-            exit 0
-          else
-            echo "❌ Shop is DOWN (HTTP $HTTP_CODE)"
-            exit 1
-          fi
+            echo "✅ Deployed successfully"
