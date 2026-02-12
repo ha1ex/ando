@@ -115,6 +115,27 @@ jobs:
           echo "🔍 Checking if site is accessible..."
           curl -f -s -o /dev/null -w "%{http_code}" https://andojv.com || echo "⚠️ Site check failed"
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run production smoke tests
+        run: |
+          echo "🔥 Running critical smoke tests on production..."
+          BASE_URL=http://83.166.246.253 npm run test:smoke-critical
+        continue-on-error: false
+
       - name: Notify Success
         if: success()
         run: |
