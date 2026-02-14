@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,9 @@
     "test:info-page": "node tests/info-page-database.spec.cjs",
     "test:admin-info-pages": "node tests/run-admin-info-test.cjs",
     "test:toggle-edit": "node tests/run-toggle-edit-test.cjs",
+    "test:smoke-critical": "playwright test tests/smoke-critical.spec.cjs",
     "screenshot:catalog-mobile-before": "node tests/catalog-mobile-screenshot.cjs",
+    "test:logo-layout": "node tests/smart-logo-check.mjs",
     "populate-info-pages": "node scripts/populate-info-pages.mjs",
     "import-data": "node scripts/import-data.mjs",
     "create-admin": "node scripts/create-admin.mjs",
@@ -108,6 +110,7 @@
     "pngjs": "^7.0.0",
     "postcss": "^8.5.6",
     "puppeteer": "^24.32.0",
+    "serve": "^14.2.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
